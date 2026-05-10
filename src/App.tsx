@@ -22,7 +22,7 @@ const App = () => {
             icon={<TerminalIcon />} 
             label="Digital Twin" 
             isActive={activeTab === 'twin'} 
-            onClick={() => setActiveTab('twin')} 
+            onClick={() => window.open('https://resume-rewrite-production.up.railway.app/', '_blank')} 
           />
           <NavItem 
             icon={<RadarIcon />} 
