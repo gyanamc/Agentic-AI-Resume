@@ -3,7 +3,7 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pypdf import PdfReader
-from agent import run_match_agent
+from backend.agent import run_match_agent
 
 app = FastAPI()
 
@@ -16,7 +16,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-CV_STORE_PATH = os.path.join("data", "master_cv.txt")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CV_STORE_PATH = os.path.join(BASE_DIR, "data", "master_cv.txt")
 
 def extract_text_from_pdf(file_path: str) -> str:
     reader = PdfReader(file_path)
@@ -30,8 +31,8 @@ async def upload_cv(file: UploadFile = File(...)):
     if not file.filename.endswith('.pdf'):
         raise HTTPException(status_code=400, detail="Only PDF resumes are supported.")
     
-    os.makedirs("data", exist_ok=True)
-    temp_pdf_path = os.path.join("data", "temp_cv.pdf")
+    os.makedirs(os.path.join(BASE_DIR, "data"), exist_ok=True)
+    temp_pdf_path = os.path.join(BASE_DIR, "data", "temp_cv.pdf")
     
     with open(temp_pdf_path, "wb") as buffer:
         buffer.write(await file.read())
@@ -69,8 +70,8 @@ async def match_jd_file(file: UploadFile = File(...)):
     if not file.filename.endswith('.pdf'):
         raise HTTPException(status_code=400, detail="Only PDF JDs are supported right now.")
 
-    os.makedirs("data", exist_ok=True)
-    temp_jd_path = os.path.join("data", "temp_jd.pdf")
+    os.makedirs(os.path.join(BASE_DIR, "data"), exist_ok=True)
+    temp_jd_path = os.path.join(BASE_DIR, "data", "temp_jd.pdf")
     
     with open(temp_jd_path, "wb") as buffer:
         buffer.write(await file.read())
