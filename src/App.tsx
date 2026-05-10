@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './index.css';
 import ReverseInterviewEngine from './ReverseInterviewEngine';
 
+import ArchitectureDiagram from './ArchitectureDiagram';
+
 const App = () => {
-  const [activeTab, setActiveTab] = useState('reverse_interview');
+  const [activeTab, setActiveTab] = useState('architecture');
 
   return (
     <div className="app-container" style={{ display: 'flex', width: '100%', height: '100%' }}>
       {/* Sidebar */}
-      <aside className="glass-panel" style={{ width: '280px', margin: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <aside className="glass-panel" style={{ width: '280px', margin: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '24px', zIndex: 10 }}>
         <div className="brand" style={{ marginBottom: '16px' }}>
           <h1 className="text-gradient" style={{ fontSize: '24px', margin: 0, letterSpacing: '-0.5px' }}>AGENT_KUMAR</h1>
           <div style={{ fontSize: '12px', color: 'var(--accent-primary)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -49,13 +51,38 @@ const App = () => {
             CHIEF AI ARCHITECT<br/>
             SBI CARD | GURGAON
           </div>
+          <div style={{ marginTop: '16px' }}>
+            <input 
+              type="file" 
+              id="masterCvInput" 
+              accept="application/pdf" 
+              style={{ display: 'none' }}
+              onChange={async (e) => {
+                if (e.target.files && e.target.files[0]) {
+                  const formData = new FormData();
+                  formData.append("file", e.target.files[0]);
+                  try {
+                    const res = await fetch('/api/upload_cv', { method: 'POST', body: formData });
+                    if(res.ok) alert("Master CV Updated Successfully!");
+                    else alert("Failed to update CV");
+                  } catch (err) { alert("Error uploading CV"); }
+                }
+              }}
+            />
+            <button 
+              onClick={() => document.getElementById('masterCvInput')?.click()}
+              style={{ background: 'transparent', border: '1px dashed var(--border-color)', color: 'var(--text-secondary)', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', width: '100%' }}>
+              ⚙️ Update Master CV
+            </button>
+          </div>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, margin: '16px 16px 16px 0', position: 'relative' }}>
+      <main style={{ flex: 1, margin: '16px 16px 16px 0', position: 'relative', overflow: 'hidden' }}>
         {activeTab === 'reverse_interview' && <ReverseInterviewEngine />}
-        {activeTab !== 'reverse_interview' && (
+        {activeTab === 'architecture' && <ArchitectureDiagram />}
+        {activeTab !== 'reverse_interview' && activeTab !== 'architecture' && (
           <div className="glass-panel" style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <h2 style={{ color: 'var(--text-secondary)' }}>Module "{activeTab}" coming soon.</h2>
           </div>

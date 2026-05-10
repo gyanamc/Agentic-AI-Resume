@@ -1,60 +1,81 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useRef, ChangeEvent } from 'react';
 
 const ReverseInterviewEngine = () => {
   const [jdText, setJdText] = useState('');
+  const [jdFile, setJdFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [logs, setLogs] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleAnalyze = () => {
-    if (!jdText.trim()) return;
+  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setJdFile(e.target.files[0]);
+      setJdText(`[PDF File Selected: ${e.target.files[0].name}]`);
+    }
+  };
+
+  const clearFile = () => {
+    setJdFile(null);
+    setJdText('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleAnalyze = async () => {
+    if (!jdText.trim() && !jdFile) return;
     setIsAnalyzing(true);
     setResult(null);
-    setLogs(['[SYSTEM] Initiating Reverse Interview Protocol...']);
+    setError(null);
+    setLogs(['[SYSTEM] Initiating Reverse Interview Protocol...', '[LANGGRAPH] Connecting to Backend...', '[AGENT] Parsing Job Description...']);
 
-    // Mock an agentic reasoning process
-    const steps = [
-      '[AGENT] Parsing Job Description...',
-      '[AGENT] Extracting key technical requirements...',
-      '[VECTOR_DB] Semantically matching against Kumar_Gyanam_Resume.pdf...',
-      '[RAG] Identifying architectural overlaps (LangGraph, vLLM, On-Premise)...',
-      '[LLM] Generating custom 30-60-90 day strategy...',
-      '[SYSTEM] Match Score calculated successfully.'
-    ];
-
-    let currentStep = 0;
-    const interval = setInterval(() => {
-      if (currentStep < steps.length) {
-        setLogs(prev => [...prev, steps[currentStep]]);
-        currentStep++;
+    try {
+      let response;
+      if (jdFile) {
+        const formData = new FormData();
+        formData.append("file", jdFile);
+        response = await fetch('/api/match_file', {
+          method: 'POST',
+          body: formData,
+        });
       } else {
-        clearInterval(interval);
-        setIsAnalyzing(false);
-        setResult({
-          score: 96,
-          matchReason: "Perfect alignment with Agentic RAG and on-premise infrastructure requirements. Existing production experience with LangGraph and vLLM at SBI Card heavily de-risks deployment.",
-          strategy: {
-            day30: "Audit existing AI stack, deploy foundational vLLM endpoints, and establish semantic search indices.",
-            day60: "Implement LangGraph stateful routing to orchestrate multi-agent workflows for core business use-cases.",
-            day90: "Achieve full production deployment with comprehensive MLflow observability and HITL self-healing."
-          }
+        response = await fetch('/api/match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ jd_text: jdText }),
         });
       }
-    }, 800);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to analyze JD');
+      }
+
+      setLogs(prev => [...prev, '[VECTOR_DB] Extracting contextual matches from CV...', '[LLM] Generating custom strategy...']);
+      const data = await response.json();
+      
+      setLogs(prev => [...prev, '[SYSTEM] Match Score calculated successfully.']);
+      setResult(data);
+    } catch (err: any) {
+      setError(err.message);
+      setLogs(prev => [...prev, `[ERROR] ${err.message}`]);
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   return (
     <div className="glass-panel" style={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <div style={{ padding: '24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: '20px' }}>Reverse Interview Engine</h2>
+          <h2 style={{ margin: 0, fontSize: '20px' }}>Match Engine (Live AI)</h2>
           <p style={{ color: 'var(--text-secondary)', margin: '8px 0 0 0', fontSize: '14px' }}>
-            Paste your Job Description. Let the AI prove my fit.
+            Paste text or upload a JD PDF. LangGraph will process it against my master CV.
           </p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <span style={{ background: 'rgba(0, 255, 204, 0.1)', color: 'var(--accent-primary)', padding: '4px 12px', borderRadius: '16px', fontSize: '12px', border: '1px solid rgba(0, 255, 204, 0.3)' }}>
-            vLLM Backend
+            OpenAI Active
           </span>
           <span style={{ background: 'rgba(0, 136, 255, 0.1)', color: 'var(--accent-secondary)', padding: '4px 12px', borderRadius: '16px', fontSize: '12px', border: '1px solid rgba(0, 136, 255, 0.3)' }}>
             LangGraph Router
@@ -64,11 +85,33 @@ const ReverseInterviewEngine = () => {
 
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
         {/* Left Side: Input */}
-        <div style={{ width: '50%', padding: '24px', borderRight: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ width: '50%', padding: '24px', borderRight: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <input 
+              type="file" 
+              accept="application/pdf" 
+              style={{ display: 'none' }} 
+              ref={fileInputRef} 
+              onChange={handleFileUpload} 
+            />
+            <button 
+              onClick={() => fileInputRef.current?.click()}
+              style={{ padding: '8px 16px', background: 'var(--panel-bg)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-primary)', cursor: 'pointer' }}>
+              📄 Upload JD (PDF)
+            </button>
+            {jdFile && (
+              <button onClick={clearFile} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid red', color: 'red', borderRadius: '8px', cursor: 'pointer' }}>
+                Clear File
+              </button>
+            )}
+          </div>
+
           <textarea
             value={jdText}
             onChange={(e) => setJdText(e.target.value)}
-            placeholder="Paste the Job Description here (e.g. 'Looking for a VP of AI Engineering with experience in on-premise LLM deployment, RAG, and team building...')"
+            disabled={jdFile !== null}
+            placeholder={jdFile ? '' : "Or paste the Job Description text here..."}
             style={{
               flex: 1,
               background: 'rgba(0,0,0,0.3)',
@@ -79,14 +122,14 @@ const ReverseInterviewEngine = () => {
               fontFamily: 'monospace',
               fontSize: '14px',
               resize: 'none',
-              outline: 'none'
+              outline: 'none',
+              opacity: jdFile ? 0.5 : 1
             }}
           />
           <button
             onClick={handleAnalyze}
-            disabled={isAnalyzing || !jdText}
+            disabled={isAnalyzing || (!jdText && !jdFile)}
             style={{
-              marginTop: '16px',
               padding: '16px',
               background: isAnalyzing ? 'var(--border-color)' : 'var(--accent-primary)',
               color: isAnalyzing ? 'var(--text-secondary)' : '#000',
@@ -99,8 +142,10 @@ const ReverseInterviewEngine = () => {
               boxShadow: isAnalyzing ? 'none' : '0 4px 14px rgba(0, 255, 204, 0.4)'
             }}
           >
-            {isAnalyzing ? 'Analyzing...' : 'Generate Match & Strategy'}
+            {isAnalyzing ? 'Analyzing via LangGraph...' : 'Generate Match & Strategy'}
           </button>
+
+          {error && <div style={{ color: 'red', fontSize: '14px', marginTop: '8px' }}>{error}</div>}
         </div>
 
         {/* Right Side: Output */}
@@ -117,7 +162,7 @@ const ReverseInterviewEngine = () => {
           {logs.length > 0 && !result && (
             <div style={{ flex: 1, background: '#000', borderRadius: '8px', padding: '16px', fontFamily: 'monospace', fontSize: '13px', border: '1px solid var(--border-color)', overflowY: 'auto' }}>
               {logs.filter(Boolean).map((log, i) => (
-                <div key={i} style={{ color: log.includes('SYSTEM') ? 'var(--text-secondary)' : 'var(--accent-primary)', marginBottom: '8px' }}>
+                <div key={i} style={{ color: log.includes('ERROR') ? 'red' : log.includes('SYSTEM') ? 'var(--text-secondary)' : 'var(--accent-primary)', marginBottom: '8px' }}>
                   <span style={{ opacity: 0.5 }}>{new Date().toISOString().split('T')[1].slice(0,8)}</span> {log}
                 </div>
               ))}
