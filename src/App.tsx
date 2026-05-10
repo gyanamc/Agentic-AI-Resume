@@ -174,6 +174,22 @@ const App = () => {
             SBI CARD | GURGAON<br />
             <span style={{ color: 'var(--accent-primary)', fontSize: '11px' }}>Faculty: IIM Indore · ISB</span>
           </div>
+          <a
+            href="https://chromewebstore.google.com/detail/ai-job-assistant/jfjimnkeogmhmgcigcecemijmhjgoppb"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px',
+              padding: '7px 10px', borderRadius: '8px', textDecoration: 'none',
+              background: 'rgba(0,136,255,0.08)', border: '1px solid rgba(0,136,255,0.2)',
+              color: '#0088ff', fontSize: '11px', fontWeight: 600,
+              transition: 'background 0.2s ease',
+            }}
+            onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,136,255,0.15)'}
+            onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,136,255,0.08)'}
+          >
+            <span>🧩</span> AI Job Assistant — Chrome
+          </a>
           <div style={{ marginTop: '12px' }}>
             <input
               type="file" id="masterCvInput" accept="application/pdf"

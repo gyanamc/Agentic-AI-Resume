@@ -168,6 +168,139 @@ const ThoughtLeadership = () => {
           </div>
         </section>
 
+        {/* Products Shipped */}
+        <section>
+          <SectionLabel label="Products I've Shipped" />
+          <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+
+            {/* Chrome Extension Card */}
+            <div style={{
+              padding: '24px',
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid rgba(0,136,255,0.2)',
+              borderRadius: '14px',
+              display: 'flex', gap: '20px', alignItems: 'flex-start',
+              transition: 'box-shadow 0.2s ease',
+            }}
+              onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = '0 0 24px rgba(0,136,255,0.12)'}
+              onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = 'none'}
+            >
+              {/* Chrome icon */}
+              <div style={{
+                width: '52px', height: '52px', borderRadius: '12px', flexShrink: 0,
+                background: 'rgba(0,136,255,0.1)', border: '1px solid rgba(0,136,255,0.25)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px',
+              }}>
+                🧩
+              </div>
+
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '6px' }}>
+                  <span style={{ fontWeight: 700, fontSize: '15px', color: '#fff' }}>AI Job Assistant</span>
+                  <span style={{
+                    fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px',
+                    background: 'rgba(0,136,255,0.15)', color: '#0088ff',
+                    border: '1px solid rgba(0,136,255,0.3)', letterSpacing: '0.5px',
+                  }}>CHROME EXTENSION</span>
+                  <span style={{
+                    fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px',
+                    background: 'rgba(0,255,204,0.1)', color: '#00ffcc',
+                    border: '1px solid rgba(0,255,204,0.25)', letterSpacing: '0.5px',
+                  }}>LIVE ON WEB STORE</span>
+                </div>
+
+                <p style={{ margin: '0 0 14px 0', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+                  An Agentic AI Chrome extension that supercharges job searching. Analyses job listings in real-time,
+                  matches them against your profile, auto-tailors your CV for each role, and assists with application
+                  workflows — all without leaving your browser tab.
+                </p>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '16px' }}>
+                  {['Agentic AI', 'LangGraph', 'Chrome Extension', 'CV Tailoring', 'Job Matching', 'Real-time Analysis'].map(tag => (
+                    <span key={tag} style={{
+                      fontSize: '11px', padding: '3px 8px', borderRadius: '4px',
+                      background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                    }}>{tag}</span>
+                  ))}
+                </div>
+
+                <a
+                  href="https://chromewebstore.google.com/detail/ai-job-assistant/jfjimnkeogmhmgcigcecemijmhjgoppb"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '8px',
+                    padding: '9px 18px',
+                    background: 'linear-gradient(135deg, #0088ff, #0055cc)',
+                    color: '#fff', borderRadius: '8px', fontWeight: 600,
+                    fontSize: '13px', textDecoration: 'none',
+                    boxShadow: '0 4px 14px rgba(0,136,255,0.25)',
+                    transition: 'opacity 0.2s ease',
+                  }}
+                  onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.opacity = '0.85'}
+                  onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.opacity = '1'}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Add to Chrome — It's Free
+                </a>
+              </div>
+            </div>
+
+            {/* Digital Twin Card */}
+            <div style={{
+              padding: '24px',
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid rgba(0,255,204,0.15)',
+              borderRadius: '14px',
+              display: 'flex', gap: '20px', alignItems: 'flex-start',
+              transition: 'box-shadow 0.2s ease',
+            }}
+              onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = '0 0 24px rgba(0,255,204,0.1)'}
+              onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = 'none'}
+            >
+              <div style={{
+                width: '52px', height: '52px', borderRadius: '12px', flexShrink: 0,
+                background: 'rgba(0,255,204,0.08)', border: '1px solid rgba(0,255,204,0.2)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px',
+              }}>
+                🤖
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '6px' }}>
+                  <span style={{ fontWeight: 700, fontSize: '15px', color: '#fff' }}>Digital Twin Resume</span>
+                  <span style={{
+                    fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px',
+                    background: 'rgba(0,255,204,0.1)', color: '#00ffcc',
+                    border: '1px solid rgba(0,255,204,0.25)', letterSpacing: '0.5px',
+                  }}>LIVE ON RAILWAY</span>
+                </div>
+                <p style={{ margin: '0 0 14px 0', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+                  An AI agent that replaces the traditional resume. Recruiters can have a live conversation with Kumar's
+                  career history, ask about specific projects, and get instant, contextual answers — powered by RAG over his full CV.
+                </p>
+                <a
+                  href="https://resume-rewrite-production.up.railway.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '8px',
+                    padding: '9px 18px',
+                    background: 'linear-gradient(135deg, #00ffcc, #0088ff)',
+                    color: '#000', borderRadius: '8px', fontWeight: 600,
+                    fontSize: '13px', textDecoration: 'none',
+                    boxShadow: '0 4px 14px rgba(0,255,204,0.2)',
+                  }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Talk to My Resume →
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
         {/* Live Portfolio CTA */}
         <section>
           <div style={{
