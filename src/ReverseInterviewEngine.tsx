@@ -3,16 +3,26 @@ import { useState, useRef, type ChangeEvent } from 'react';
 const ReverseInterviewEngine = () => {
   const [jdText, setJdText] = useState('');
   const [jdFile, setJdFile] = useState<File | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<any>(null);
-  const [logs, setLogs] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setJdFile(e.target.files[0]);
-      setJdText(`[PDF File Selected: ${e.target.files[0].name}]`);
+      setJdText('');
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type === 'application/pdf') {
+      setJdFile(file);
+      setJdText('');
     }
   };
 
@@ -27,17 +37,13 @@ const ReverseInterviewEngine = () => {
     setIsAnalyzing(true);
     setResult(null);
     setError(null);
-    setLogs(['[SYSTEM] Initiating Reverse Interview Protocol...', '[LANGGRAPH] Connecting to Backend...', '[AGENT] Parsing Job Description...']);
 
     try {
       let response;
       if (jdFile) {
         const formData = new FormData();
-        formData.append("file", jdFile);
-        response = await fetch('/api/match_file', {
-          method: 'POST',
-          body: formData,
-        });
+        formData.append('file', jdFile);
+        response = await fetch('/api/match_file', { method: 'POST', body: formData });
       } else {
         response = await fetch('/api/match', {
           method: 'POST',
@@ -51,163 +57,262 @@ const ReverseInterviewEngine = () => {
         throw new Error(errorData.detail || 'Failed to analyze JD');
       }
 
-      setLogs(prev => [...prev, '[VECTOR_DB] Extracting contextual matches from CV...', '[LLM] Generating custom strategy...']);
       const data = await response.json();
-      
-      setLogs(prev => [...prev, '[SYSTEM] Match Score calculated successfully.']);
       setResult(data);
     } catch (err: any) {
       setError(err.message);
-      setLogs(prev => [...prev, `[ERROR] ${err.message}`]);
     } finally {
       setIsAnalyzing(false);
     }
   };
 
+  const scoreColor = result
+    ? result.score >= 75
+      ? '#00ffcc'
+      : result.score >= 50
+      ? '#0088ff'
+      : '#ff5555'
+    : '#00ffcc';
+
   return (
-    <div className="glass-panel" style={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <div style={{ padding: '24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className="h-full flex flex-col overflow-hidden rounded-2xl"
+      style={{ background: 'rgba(10,10,20,0.7)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)' }}>
+
+      {/* Header */}
+      <div className="flex items-center justify-between px-6 py-4"
+        style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: '20px' }}>Match Engine (Live AI)</h2>
-          <p style={{ color: 'var(--text-secondary)', margin: '8px 0 0 0', fontSize: '14px' }}>
-            Paste text or upload a JD PDF. LangGraph will process it against my master CV.
+          <h2 className="text-white font-semibold text-lg tracking-tight">Match Engine</h2>
+          <p className="text-xs mt-0.5" style={{ color: '#666' }}>
+            Drop a JD or paste text — LangGraph scores your fit instantly
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <span style={{ background: 'rgba(0, 255, 204, 0.1)', color: 'var(--accent-primary)', padding: '4px 12px', borderRadius: '16px', fontSize: '12px', border: '1px solid rgba(0, 255, 204, 0.3)' }}>
-            OpenAI Active
+        <div className="flex gap-2">
+          <span className="text-xs px-3 py-1 rounded-full font-medium"
+            style={{ background: 'rgba(0,255,204,0.08)', color: '#00ffcc', border: '1px solid rgba(0,255,204,0.2)' }}>
+            ● OpenAI
           </span>
-          <span style={{ background: 'rgba(0, 136, 255, 0.1)', color: 'var(--accent-secondary)', padding: '4px 12px', borderRadius: '16px', fontSize: '12px', border: '1px solid rgba(0, 136, 255, 0.3)' }}>
-            LangGraph Router
+          <span className="text-xs px-3 py-1 rounded-full font-medium"
+            style={{ background: 'rgba(0,136,255,0.08)', color: '#0088ff', border: '1px solid rgba(0,136,255,0.2)' }}>
+            ● LangGraph
           </span>
         </div>
       </div>
 
-      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        {/* Left Side: Input */}
-        <div style={{ width: '50%', padding: '24px', borderRight: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <input 
-              type="file" 
-              accept="application/pdf" 
-              style={{ display: 'none' }} 
-              ref={fileInputRef} 
-              onChange={handleFileUpload} 
-            />
-            <button 
-              onClick={() => fileInputRef.current?.click()}
-              style={{ padding: '8px 16px', background: 'var(--panel-bg)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-primary)', cursor: 'pointer' }}>
-              📄 Upload JD (PDF)
-            </button>
-            {jdFile && (
-              <button onClick={clearFile} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid red', color: 'red', borderRadius: '8px', cursor: 'pointer' }}>
-                Clear File
-              </button>
+      {/* Body */}
+      <div className="flex flex-1 overflow-hidden gap-0">
+
+        {/* ── Left: Input ── */}
+        <div className="flex flex-col gap-4 p-6 overflow-y-auto"
+          style={{ width: '45%', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+
+          {/* Drop Zone */}
+          <div
+            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={handleDrop}
+            onClick={() => !jdFile && fileInputRef.current?.click()}
+            className="relative flex flex-col items-center justify-center gap-2 rounded-xl cursor-pointer transition-all duration-300"
+            style={{
+              height: '120px',
+              border: `1.5px dashed ${isDragging ? '#00ffcc' : jdFile ? '#0088ff' : 'rgba(255,255,255,0.15)'}`,
+              background: isDragging
+                ? 'rgba(0,255,204,0.05)'
+                : jdFile
+                ? 'rgba(0,136,255,0.05)'
+                : 'rgba(255,255,255,0.02)',
+              boxShadow: isDragging ? '0 0 24px rgba(0,255,204,0.15)' : 'none',
+            }}
+          >
+            <input type="file" accept="application/pdf" style={{ display: 'none' }}
+              ref={fileInputRef} onChange={handleFileUpload} />
+
+            {jdFile ? (
+              <>
+                <div className="text-2xl">📄</div>
+                <p className="text-sm font-medium" style={{ color: '#0088ff' }}>{jdFile.name}</p>
+                <button
+                  onClick={(e) => { e.stopPropagation(); clearFile(); }}
+                  className="text-xs px-3 py-1 rounded-full transition-all"
+                  style={{ background: 'rgba(255,85,85,0.1)', color: '#ff5555', border: '1px solid rgba(255,85,85,0.3)' }}>
+                  Remove
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="text-2xl opacity-40">⬆️</div>
+                <p className="text-sm" style={{ color: '#555' }}>
+                  Drop PDF here or <span style={{ color: '#00ffcc' }}>browse</span>
+                </p>
+              </>
             )}
           </div>
 
+          {/* Divider */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
+            <span className="text-xs" style={{ color: '#444' }}>or paste text</span>
+            <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
+          </div>
+
+          {/* Textarea */}
           <textarea
             value={jdText}
             onChange={(e) => setJdText(e.target.value)}
-            disabled={jdFile !== null}
-            placeholder={jdFile ? '' : "Or paste the Job Description text here..."}
+            disabled={!!jdFile}
+            placeholder="Paste the Job Description here..."
+            className="flex-1 rounded-xl p-4 text-sm resize-none outline-none transition-all duration-200 font-mono"
             style={{
-              flex: 1,
-              background: 'rgba(0,0,0,0.3)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '8px',
-              padding: '16px',
-              color: 'var(--text-primary)',
-              fontFamily: 'monospace',
-              fontSize: '14px',
-              resize: 'none',
-              outline: 'none',
-              opacity: jdFile ? 0.5 : 1
+              minHeight: '180px',
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              color: jdFile ? '#333' : '#ccc',
+              caretColor: '#00ffcc',
             }}
+            onFocus={(e) => e.currentTarget.style.borderColor = 'rgba(0,255,204,0.3)'}
+            onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
           />
+
+          {/* CTA Button */}
           <button
             onClick={handleAnalyze}
-            disabled={isAnalyzing || (!jdText && !jdFile)}
+            disabled={isAnalyzing || (!jdText.trim() && !jdFile)}
+            className="relative w-full py-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 overflow-hidden"
             style={{
-              padding: '16px',
-              background: isAnalyzing ? 'var(--border-color)' : 'var(--accent-primary)',
-              color: isAnalyzing ? 'var(--text-secondary)' : '#000',
-              border: 'none',
-              borderRadius: '8px',
-              fontWeight: 'bold',
-              fontSize: '16px',
-              cursor: isAnalyzing ? 'not-allowed' : 'pointer',
-              transition: 'all 0.2s ease',
-              boxShadow: isAnalyzing ? 'none' : '0 4px 14px rgba(0, 255, 204, 0.4)'
+              background: isAnalyzing || (!jdText.trim() && !jdFile)
+                ? 'rgba(255,255,255,0.05)'
+                : 'linear-gradient(135deg, #00ffcc, #0088ff)',
+              color: isAnalyzing || (!jdText.trim() && !jdFile) ? '#444' : '#000',
+              boxShadow: isAnalyzing || (!jdText.trim() && !jdFile)
+                ? 'none'
+                : '0 4px 24px rgba(0,255,204,0.3)',
+              cursor: isAnalyzing || (!jdText.trim() && !jdFile) ? 'not-allowed' : 'pointer',
             }}
           >
-            {isAnalyzing ? 'Analyzing via LangGraph...' : 'Generate Match & Strategy'}
+            {isAnalyzing ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="inline-block w-4 h-4 rounded-full border-2 border-t-transparent animate-spin"
+                  style={{ borderColor: '#555', borderTopColor: 'transparent' }} />
+                Analyzing via LangGraph...
+              </span>
+            ) : (
+              '⚡ Generate Match & Strategy'
+            )}
           </button>
 
-          {error && <div style={{ color: 'red', fontSize: '14px', marginTop: '8px' }}>{error}</div>}
+          {error && (
+            <div className="text-xs px-4 py-3 rounded-xl"
+              style={{ background: 'rgba(255,85,85,0.08)', color: '#ff5555', border: '1px solid rgba(255,85,85,0.2)' }}>
+              ⚠ {error}
+            </div>
+          )}
         </div>
 
-        {/* Right Side: Output */}
-        <div style={{ width: '50%', padding: '24px', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
-          {!isAnalyzing && !result && logs.length === 0 && (
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', textAlign: 'center' }}>
-              <div>
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--border-color)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '16px' }}><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                <p>Waiting for JD Input.<br/>System Idle.</p>
-              </div>
+        {/* ── Right: Output ── */}
+        <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-4">
+
+          {/* Idle state */}
+          {!isAnalyzing && !result && (
+            <div className="flex-1 flex flex-col items-center justify-center gap-3 opacity-30">
+              <div className="text-5xl">🎯</div>
+              <p className="text-sm text-center" style={{ color: '#555' }}>
+                Results will appear here<br />after analysis
+              </p>
             </div>
           )}
 
-          {logs.length > 0 && !result && (
-            <div style={{ flex: 1, background: '#000', borderRadius: '8px', padding: '16px', fontFamily: 'monospace', fontSize: '13px', border: '1px solid var(--border-color)', overflowY: 'auto' }}>
-              {logs.filter(Boolean).map((log, i) => (
-                <div key={i} style={{ color: log.includes('ERROR') ? 'red' : log.includes('SYSTEM') ? 'var(--text-secondary)' : 'var(--accent-primary)', marginBottom: '8px' }}>
-                  <span style={{ opacity: 0.5 }}>{new Date().toISOString().split('T')[1].slice(0,8)}</span> {log}
-                </div>
-              ))}
-              <div className="animate-pulse" style={{ color: 'var(--accent-secondary)', marginTop: '8px' }}>_</div>
+          {/* Loading skeleton */}
+          {isAnalyzing && (
+            <div className="flex flex-col gap-4 animate-pulse">
+              <div className="h-28 rounded-2xl" style={{ background: 'rgba(255,255,255,0.04)' }} />
+              <div className="h-20 rounded-2xl" style={{ background: 'rgba(255,255,255,0.03)' }} />
+              <div className="h-36 rounded-2xl" style={{ background: 'rgba(255,255,255,0.03)' }} />
             </div>
           )}
 
+          {/* Result */}
           {result && (
-            <div style={{ animation: 'fadeIn 0.5s ease' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-                <div style={{ width: '80px', height: '80px', borderRadius: '50%', border: '4px solid var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold', color: 'var(--accent-primary)' }}>
-                  {result.score}%
+            <div className="flex flex-col gap-4" style={{ animation: 'fadeSlideIn 0.5s ease' }}>
+
+              {/* Score Card */}
+              <div className="rounded-2xl p-5 flex items-center gap-5"
+                style={{
+                  background: 'rgba(255,255,255,0.03)',
+                  border: `1px solid ${scoreColor}30`,
+                  boxShadow: `0 0 32px ${scoreColor}15`,
+                }}>
+                {/* Circular score */}
+                <div className="relative flex-shrink-0" style={{ width: '88px', height: '88px' }}>
+                  <svg width="88" height="88" viewBox="0 0 88 88">
+                    <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="6" />
+                    <circle
+                      cx="44" cy="44" r="36" fill="none"
+                      stroke={scoreColor} strokeWidth="6"
+                      strokeLinecap="round"
+                      strokeDasharray={`${2 * Math.PI * 36}`}
+                      strokeDashoffset={`${2 * Math.PI * 36 * (1 - result.score / 100)}`}
+                      transform="rotate(-90 44 44)"
+                      style={{ transition: 'stroke-dashoffset 1s ease', filter: `drop-shadow(0 0 6px ${scoreColor})` }}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="font-bold text-xl" style={{ color: scoreColor }}>{result.score}%</span>
+                  </div>
                 </div>
+
                 <div>
-                  <h3 style={{ margin: '0 0 4px 0', color: 'var(--text-primary)' }}>High Match Confidence</h3>
-                  <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.5 }}>
+                  <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: scoreColor }}>
+                    Match Score
+                  </div>
+                  <p className="text-sm leading-relaxed" style={{ color: '#bbb' }}>
                     {result.matchReason}
                   </p>
                 </div>
               </div>
 
-              <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border-color)', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                  Custom AI Integration Strategy
-                </div>
-                <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <StrategyRow day="30" text={result.strategy.day30} />
-                  <StrategyRow day="60" text={result.strategy.day60} />
-                  <StrategyRow day="90" text={result.strategy.day90} />
-                </div>
+              {/* Strategy Header */}
+              <div className="flex items-center gap-2 px-1">
+                <span className="text-sm font-semibold" style={{ color: '#888' }}>⚡ 30-60-90 Day Strategy</span>
+                <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
               </div>
+
+              {/* Strategy Cards */}
+              {[
+                { day: '30', text: result.strategy.day30, color: '#00ffcc', label: 'Onboard & Audit' },
+                { day: '60', text: result.strategy.day60, color: '#0088ff', label: 'Build & Integrate' },
+                { day: '90', text: result.strategy.day90, color: '#ff00cc', label: 'Scale & Deliver' },
+              ].map(({ day, text, color, label }) => (
+                <div key={day} className="rounded-xl p-4 flex gap-4"
+                  style={{
+                    background: 'rgba(255,255,255,0.02)',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    borderLeft: `3px solid ${color}`,
+                  }}>
+                  <div className="flex-shrink-0 text-center" style={{ minWidth: '48px' }}>
+                    <div className="text-xs font-bold" style={{ color }}>DAY</div>
+                    <div className="text-2xl font-black leading-none" style={{ color }}>{day}</div>
+                    <div className="text-xs mt-1" style={{ color: '#444' }}>{label}</div>
+                  </div>
+                  <p className="text-sm leading-relaxed" style={{ color: '#aaa' }}>{text}</p>
+                </div>
+              ))}
             </div>
           )}
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeSlideIn {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin { animation: spin 0.8s linear infinite; }
+      `}</style>
     </div>
   );
 };
-
-const StrategyRow = ({ day, text }: any) => (
-  <div style={{ display: 'flex', gap: '16px' }}>
-    <div style={{ minWidth: '50px', fontWeight: 'bold', color: 'var(--accent-secondary)' }}>Day {day}</div>
-    <div style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.5 }}>{text}</div>
-  </div>
-);
 
 export default ReverseInterviewEngine;
