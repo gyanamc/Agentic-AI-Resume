@@ -26,6 +26,20 @@ def extract_text_from_pdf(file_path: str) -> str:
         text += page.extract_text() + "\n"
     return text
 
+@app.on_event("startup")
+async def startup_event():
+    os.makedirs(os.path.join(BASE_DIR, "data"), exist_ok=True)
+    if not os.path.exists(CV_STORE_PATH):
+        # Look for any PDF in the data directory and parse it
+        data_dir = os.path.join(BASE_DIR, "data")
+        for filename in os.listdir(data_dir):
+            if filename.endswith(".pdf"):
+                print(f"Auto-parsing CV from {filename}...")
+                cv_text = extract_text_from_pdf(os.path.join(data_dir, filename))
+                with open(CV_STORE_PATH, "w") as f:
+                    f.write(cv_text)
+                break
+
 @app.post("/api/upload_cv")
 async def upload_cv(file: UploadFile = File(...)):
     if not file.filename.endswith('.pdf'):
