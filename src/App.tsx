@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './index.css';
 import ReverseInterviewEngine from './ReverseInterviewEngine';
-
 import ArchitectureDiagram from './ArchitectureDiagram';
+import kumarPhoto from './assets/kumar.jpg';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('architecture');
@@ -12,10 +12,27 @@ const App = () => {
       {/* Sidebar */}
       <aside className="glass-panel" style={{ width: '280px', margin: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '24px', zIndex: 10 }}>
         <div className="brand" style={{ marginBottom: '16px' }}>
-          <h1 className="text-gradient" style={{ fontSize: '24px', margin: 0, letterSpacing: '-0.5px' }}>AGENT_KUMAR</h1>
-          <div style={{ fontSize: '12px', color: 'var(--accent-primary)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--accent-primary)' }} className="animate-pulse"></span>
-            SYSTEM ONLINE V2.5
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+            <img
+              src={kumarPhoto}
+              alt="Kumar Gyanam"
+              style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                border: '2px solid var(--accent-primary)',
+                boxShadow: '0 0 12px rgba(0, 255, 204, 0.35)',
+                flexShrink: 0,
+              }}
+            />
+            <div>
+              <h1 className="text-gradient" style={{ fontSize: '20px', margin: 0, letterSpacing: '-0.5px' }}>AGENT_KUMAR</h1>
+              <div style={{ fontSize: '11px', color: 'var(--accent-primary)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'var(--accent-primary)', flexShrink: 0 }} className="animate-pulse"></span>
+                SYSTEM ONLINE V2.5
+              </div>
+            </div>
           </div>
         </div>
 
