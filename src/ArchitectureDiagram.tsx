@@ -1,6 +1,13 @@
 import { useState } from 'react';
 
 const NODES = {
+  fastapi: {
+    id: 'fastapi',
+    title: 'FastAPI Gateway',
+    layer: 'API Layer',
+    color: '#06b6d4',
+    reason: "FastAPI serves as the primary integration layer connecting the RAG platform with SBI Card's broader enterprise ecosystem. It exposes RESTful endpoints that receive queries from internal systems — including the Card Recommender engine, Agent-Assist platform, and Internal GPT portal. It handles request validation, authentication, rate limiting, and async routing before forwarding clean payloads to the LangGraph orchestrator. On the response side, it serializes and returns structured outputs back to the calling systems. Chosen for its async-first design, automatic OpenAPI documentation, and Pydantic-based schema validation which aligns with our strict data contract requirements."
+  },
   langgraph: {
     id: 'langgraph',
     title: 'LangGraph Orchestrator',
@@ -107,6 +114,9 @@ const ArchitectureDiagram = () => {
             <div style={{ border: '1px dashed var(--text-secondary)', padding: '16px', borderRadius: '16px', width: '100%', textAlign: 'center', color: 'var(--text-secondary)' }}>
               Client Applications (SBI Card Recommender, Agent-Assist, Internal GPT)
             </div>
+
+            {/* FastAPI Gateway */}
+            <ArchitectureNode node={NODES.fastapi} isSelected={selectedNodeId === 'fastapi'} onClick={() => setSelectedNodeId('fastapi')} />
 
             {/* Orchestration */}
             <ArchitectureNode node={NODES.langgraph} isSelected={selectedNodeId === 'langgraph'} onClick={() => setSelectedNodeId('langgraph')} />
