@@ -86,6 +86,26 @@ async def match_jd_file(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+# Serve static files and SPA fallback
+DIST_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "dist")
+if os.path.exists(DIST_DIR):
+    # Mount assets folder directly
+    assets_dir = os.path.join(DIST_DIR, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+    
+    @app.get("/{full_path:path}")
+    async def catch_all(full_path: str):
+        # Serve exact file if it exists (e.g., favicon.ico, vite.svg)
+        file_path = os.path.join(DIST_DIR, full_path)
+        if os.path.isfile(file_path):
+            return FileResponse(file_path)
+        # Fallback to index.html for any other route
+        return FileResponse(os.path.join(DIST_DIR, "index.html"))
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
