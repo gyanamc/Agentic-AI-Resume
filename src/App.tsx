@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './index.css';
 import ReverseInterviewEngine from './ReverseInterviewEngine';
 import ArchitectureDiagram from './ArchitectureDiagram';
+import DeployMe from './DeployMe';
 import kumarPhoto from './assets/kumar.jpg';
 
 const App = () => {
@@ -99,7 +100,8 @@ const App = () => {
       <main style={{ flex: 1, margin: '16px 16px 16px 0', position: 'relative', overflow: 'hidden' }}>
         {activeTab === 'reverse_interview' && <ReverseInterviewEngine />}
         {activeTab === 'architecture' && <ArchitectureDiagram />}
-        {activeTab !== 'reverse_interview' && activeTab !== 'architecture' && (
+        {activeTab === 'deploy' && <DeployMe />}
+        {activeTab !== 'reverse_interview' && activeTab !== 'architecture' && activeTab !== 'deploy' && (
           <div className="glass-panel" style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <h2 style={{ color: 'var(--text-secondary)' }}>Module "{activeTab}" coming soon.</h2>
           </div>

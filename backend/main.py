@@ -1,4 +1,7 @@
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -100,6 +103,54 @@ async def match_jd_file(file: UploadFile = File(...)):
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+class ContactRequest(BaseModel):
+    recruiter_name: str
+    recruiter_email: str
+    message: str
+
+@app.post("/api/contact")
+async def contact(request: ContactRequest):
+    gmail_user = "gyanamc@gmail.com"
+    gmail_app_password = os.environ.get("GMAIL_APP_PASSWORD")
+
+    if not gmail_app_password:
+        raise HTTPException(status_code=500, detail="Email service not configured. GMAIL_APP_PASSWORD is not set.")
+
+    try:
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = f"[AGENT_KUMAR] New Recruiter Inquiry from {request.recruiter_name}"
+        msg["From"] = gmail_user
+        msg["To"] = gmail_user
+        msg["Reply-To"] = request.recruiter_email
+
+        html_body = f"""
+        <html><body style="font-family: Arial, sans-serif; background: #0a0a0a; color: #fff; padding: 32px;">
+          <div style="max-width: 560px; margin: 0 auto; background: #111; border: 1px solid #222; border-radius: 12px; padding: 32px;">
+            <h2 style="color: #00ffcc; margin-top: 0;">New Recruiter Inquiry</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr><td style="padding: 8px 0; color: #888; width: 140px;">Name</td>
+                  <td style="padding: 8px 0; color: #fff;">{request.recruiter_name}</td></tr>
+              <tr><td style="padding: 8px 0; color: #888;">Email</td>
+                  <td style="padding: 8px 0; color: #0088ff;">{request.recruiter_email}</td></tr>
+            </table>
+            <hr style="border-color: #222; margin: 24px 0;" />
+            <p style="color: #888; margin-bottom: 8px;">Message:</p>
+            <p style="color: #ccc; line-height: 1.6; white-space: pre-wrap;">{request.message}</p>
+          </div>
+        </body></html>
+        """
+
+        msg.attach(MIMEText(html_body, "html"))
+
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(gmail_user, gmail_app_password)
+            server.sendmail(gmail_user, gmail_user, msg.as_string())
+
+        return {"message": "Email sent successfully!"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
+
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
