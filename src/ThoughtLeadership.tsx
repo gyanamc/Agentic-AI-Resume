@@ -73,7 +73,7 @@ const SPEAKING_TOPICS = [
 const PUBLICATIONS_QUOTES = [
   {
     quote: "I built an Agentic AI bot to deprecate my own traditional resume. Instead of reading, talk to it.",
-    context: "Personal AI Portfolio — gyanam.store",
+    context: "Personal AI Portfolio — ai-showcase-site-production.up.railway.app",
     color: '#00ffcc',
   },
   {
@@ -326,11 +326,11 @@ const ThoughtLeadership = () => {
             <div>
               <div style={{ fontWeight: 700, fontSize: '15px', color: 'var(--accent-primary)' }}>30+ Production AI Systems</div>
               <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                Live portfolio at gyanam.store — real systems, real scale, real impact.
+                Live portfolio at ai-showcase-site-production.up.railway.app — real systems, real scale, real impact.
               </div>
             </div>
             <a
-              href="https://gyanam.store"
+              href="https://ai-showcase-site-production.up.railway.app"
               target="_blank"
               rel="noopener noreferrer"
               style={{
