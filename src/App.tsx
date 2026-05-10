@@ -188,7 +188,8 @@ const App = () => {
             onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,136,255,0.15)'}
             onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,136,255,0.08)'}
           >
-            <span>🧩</span> AI Job Assistant — Chrome
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#0088ff', boxShadow: '0 0 6px #0088ff', flexShrink: 0, display: 'inline-block' }} />
+            AI Job Assistant — Chrome
           </a>
           <div style={{ marginTop: '12px' }}>
             <input

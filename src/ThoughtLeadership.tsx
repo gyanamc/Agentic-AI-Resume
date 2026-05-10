@@ -1,3 +1,19 @@
+const DotIcon = ({ color }: { color: string }) => (
+  <div style={{
+    width: '40px', height: '40px', borderRadius: '10px',
+    background: `${color}18`,
+    border: `1px solid ${color}35`,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    flexShrink: 0,
+  }}>
+    <div style={{
+      width: '11px', height: '11px', borderRadius: '50%',
+      background: color,
+      boxShadow: `0 0 8px ${color}`,
+    }} />
+  </div>
+);
+
 const INSTITUTIONS = [
   {
     name: 'IIM Indore',
@@ -99,9 +115,13 @@ const ThoughtLeadership = () => {
                 borderLeft: `3px solid ${inst.color}`,
                 borderRadius: '12px',
               }}>
-                <div style={{ fontSize: '28px', marginBottom: '10px' }}>{inst.logo}</div>
-                <div style={{ fontWeight: 700, fontSize: '15px', color: inst.color }}>{inst.name}</div>
-                <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px', marginBottom: '12px' }}>{inst.role}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
+                  <DotIcon color={inst.color} />
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: '15px', color: inst.color }}>{inst.name}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>{inst.role}</div>
+                  </div>
+                </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                   {inst.topics.map(t => (
                     <span key={t} style={{
@@ -138,7 +158,7 @@ const ThoughtLeadership = () => {
                   (e.currentTarget as HTMLDivElement).style.boxShadow = 'none';
                 }}
               >
-                <div style={{ fontSize: '22px', marginBottom: '10px' }}>{topic.icon}</div>
+                <div style={{ marginBottom: '10px' }}><DotIcon color={topic.color} /></div>
                 <div style={{ fontWeight: 600, fontSize: '14px', color: topic.color, marginBottom: '6px' }}>{topic.title}</div>
                 <div style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{topic.desc}</div>
               </div>
@@ -185,14 +205,8 @@ const ThoughtLeadership = () => {
               onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = '0 0 24px rgba(0,136,255,0.12)'}
               onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = 'none'}
             >
-              {/* Chrome icon */}
-              <div style={{
-                width: '52px', height: '52px', borderRadius: '12px', flexShrink: 0,
-                background: 'rgba(0,136,255,0.1)', border: '1px solid rgba(0,136,255,0.25)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px',
-              }}>
-                🧩
-              </div>
+              {/* Chrome extension dot icon */}
+              <DotIcon color="#0088ff" />
 
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '6px' }}>
@@ -259,13 +273,8 @@ const ThoughtLeadership = () => {
               onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = '0 0 24px rgba(0,255,204,0.1)'}
               onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = 'none'}
             >
-              <div style={{
-                width: '52px', height: '52px', borderRadius: '12px', flexShrink: 0,
-                background: 'rgba(0,255,204,0.08)', border: '1px solid rgba(0,255,204,0.2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px',
-              }}>
-                🤖
-              </div>
+              {/* Digital Twin dot icon */}
+              <DotIcon color="#00ffcc" />
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '6px' }}>
                   <span style={{ fontWeight: 700, fontSize: '15px', color: '#fff' }}>Digital Twin Resume</span>
