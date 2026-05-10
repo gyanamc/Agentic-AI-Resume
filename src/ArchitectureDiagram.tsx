@@ -36,6 +36,20 @@ const NODES = {
     color: '#ff5555',
     reason: "I established a rigorous evaluation loop using Ragas (for metric-based assessment of faithfulness/relevancy) and MLflow for end-to-end experiment tracking, versioning, and latency observability."
   },
+  pre_guardrail: {
+    id: 'pre_guardrail',
+    title: 'Pre-Guardrail',
+    layer: 'Guardrails.ai — Input Validation',
+    color: '#f97316',
+    reason: "Before any user input reaches the LLM, it passes through Guardrails.ai's pre-guardrail pipeline. This validates the incoming data against multiple policies in parallel: PII detection (names, Aadhaar, PAN, account numbers), toxicity & hate speech screening, prompt injection attempts, and policy violations across multiple languages including Hindi and regional Indian languages. Only clean, policy-compliant input is forwarded to the LLM routing layer. Any violation triggers an immediate rejection with a safe fallback response — the LLM never sees the offending input."
+  },
+  post_guardrail: {
+    id: 'post_guardrail',
+    title: 'Post-Guardrail',
+    layer: 'Guardrails.ai — Output Validation',
+    color: '#fb923c',
+    reason: "After the LLM generates a response, it passes through Guardrails.ai's post-guardrail pipeline before being returned to the client. This checks for hallucination (verifying factual claims against the retrieved context), output toxicity, PII leakage in the generated text, and format/schema conformance. If the output fails validation, the system either triggers a re-generation with corrective instructions or returns a safe fallback — ensuring the end user always receives a grounded, policy-compliant response."
+  },
   gptoss: {
     id: 'gptoss',
     title: 'GPT-OSS 20B',
@@ -97,6 +111,9 @@ const ArchitectureDiagram = () => {
             {/* Orchestration */}
             <ArchitectureNode node={NODES.langgraph} isSelected={selectedNodeId === 'langgraph'} onClick={() => setSelectedNodeId('langgraph')} />
 
+            {/* Pre-Guardrail */}
+            <GuardrailNode node={NODES.pre_guardrail} isSelected={selectedNodeId === 'pre_guardrail'} onClick={() => setSelectedNodeId('pre_guardrail')} label="INPUT" />
+
             {/* Inference + Serving */}
             <div style={{ display: 'flex', gap: '40px', width: '100%', justifyContent: 'center' }}>
               <ArchitectureNode node={NODES.vllm} isSelected={selectedNodeId === 'vllm'} onClick={() => setSelectedNodeId('vllm')} />
@@ -119,6 +136,9 @@ const ArchitectureDiagram = () => {
               <ArchitectureNode node={NODES.gemma}   isSelected={selectedNodeId === 'gemma'}   onClick={() => setSelectedNodeId('gemma')}   compact />
               <ArchitectureNode node={NODES.minilm}  isSelected={selectedNodeId === 'minilm'}  onClick={() => setSelectedNodeId('minilm')}  compact />
             </div>
+
+            {/* Post-Guardrail */}
+            <GuardrailNode node={NODES.post_guardrail} isSelected={selectedNodeId === 'post_guardrail'} onClick={() => setSelectedNodeId('post_guardrail')} label="OUTPUT" />
 
             {/* Vector Search + MLOps */}
             <div style={{ display: 'flex', gap: '40px', width: '100%', justifyContent: 'center' }}>
@@ -215,6 +235,50 @@ const ArchitectureNode = ({ node, isSelected, onClick, compact }: any) => {
       <div style={{ textAlign: 'center' }}>
         <div style={{ fontWeight: 'bold', fontSize: compact ? '13px' : '16px', color: isSelected ? '#fff' : 'var(--text-primary)' }}>{node.title}</div>
         <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px' }}>{node.layer}</div>
+      </div>
+    </div>
+  );
+};
+
+const GuardrailNode = ({ node, isSelected, onClick, label }: any) => {
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        width: '100%',
+        maxWidth: '560px',
+        padding: '14px 24px',
+        background: isSelected ? `${node.color}15` : 'rgba(0,0,0,0.3)',
+        border: `1px solid ${isSelected ? node.color : node.color + '40'}`,
+        borderRadius: '10px',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        boxShadow: isSelected ? `0 0 20px ${node.color}30` : 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '16px',
+      }}
+      onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.borderColor = node.color; }}
+      onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.borderColor = node.color + '40'; }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: node.color, boxShadow: `0 0 6px ${node.color}` }} />
+        <span style={{ fontWeight: 600, fontSize: '14px', color: node.color }}>{node.title}</span>
+        <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Guardrails.ai</span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{
+          fontSize: '10px', fontWeight: 700, letterSpacing: '1px',
+          padding: '3px 8px', borderRadius: '4px',
+          background: `${node.color}20`, color: node.color,
+          border: `1px solid ${node.color}40`
+        }}>{label}</span>
+        <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+          {label === 'INPUT'
+            ? 'PII · Toxicity · Prompt Injection · Policy'
+            : 'Hallucination · PII Leak · Format · Toxicity'}
+        </span>
       </div>
     </div>
   );
