@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import './index.css';
+import './App.css';
 import ReverseInterviewEngine from './ReverseInterviewEngine';
 import ArchitectureDiagram from './ArchitectureDiagram';
 import DeployMe from './DeployMe';
@@ -29,10 +30,10 @@ const useCounter = (target: number, duration = 1800) => {
 
 // ── Stats data ─────────────────────────────────────────────────────────────
 const STATS = [
-  { value: 22, suffix: 'M+', label: 'Users Served' },
-  { value: 75, suffix: '+',  label: 'FTE Saved' },
-  { value: 400, suffix: '%', label: 'Bill Pay Growth' },
-  { value: 30, suffix: '+',  label: 'Prod AI Systems' },
+  { value: 22,  suffix: 'M+', label: 'Users Served' },
+  { value: 75,  suffix: '+',  label: 'FTE Saved' },
+  { value: 400, suffix: '%',  label: 'Bill Pay Growth' },
+  { value: 30,  suffix: '+',  label: 'Prod AI Systems' },
 ];
 
 const StatItem = ({ value, suffix, label }: { value: number; suffix: string; label: string }) => {
@@ -66,11 +67,10 @@ const AmbientBackground = () => {
     resize();
     window.addEventListener('resize', resize);
 
-    // Orbs
     const orbs = [
-      { x: 0.15, y: 0.1,  r: 320, color: 'rgba(0,255,204,0.045)', dx: 0.00012, dy: 0.00008 },
-      { x: 0.85, y: 0.2,  r: 280, color: 'rgba(0,136,255,0.04)',  dx: -0.0001, dy: 0.00012 },
-      { x: 0.5,  y: 0.85, r: 350, color: 'rgba(167,139,250,0.03)', dx: 0.00008, dy: -0.0001 },
+      { x: 0.15, y: 0.1,  r: 320, color: 'rgba(0,255,204,0.045)', dx: 0.00012,  dy: 0.00008 },
+      { x: 0.85, y: 0.2,  r: 280, color: 'rgba(0,136,255,0.04)',   dx: -0.0001,  dy: 0.00012 },
+      { x: 0.5,  y: 0.85, r: 350, color: 'rgba(167,139,250,0.03)', dx: 0.00008,  dy: -0.0001 },
     ];
 
     let frame: number;
@@ -105,25 +105,58 @@ const AmbientBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: 'fixed', top: 0, left: 0,
-        width: '100%', height: '100%',
-        pointerEvents: 'none', zIndex: 0,
-      }}
+      style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }}
     />
   );
 };
 
+// ── Nav items config ───────────────────────────────────────────────────────
+const NAV_ITEMS = [
+  { color: '#00ffcc', label: 'Digital Twin',       tab: 'twin',             external: 'https://resume-rewrite-production.up.railway.app/' },
+  { color: '#0088ff', label: 'Match Engine',       tab: 'reverse_interview' },
+  { color: '#a78bfa', label: 'Architecture',       tab: 'architecture' },
+  { color: '#fb923c', label: 'Thought Leadership', tab: 'thought' },
+  { color: '#34d399', label: 'Live Portfolio',     tab: 'portfolio' },
+  { color: '#f472b6', label: 'Deploy Me',          tab: 'deploy' },
+];
+
 // ── Main App ───────────────────────────────────────────────────────────────
 const App = () => {
   const [activeTab, setActiveTab] = useState('architecture');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const handleNav = (tab: string, external?: string) => {
+    if (external) { window.open(external, '_blank'); }
+    else { setActiveTab(tab); }
+    setSidebarOpen(false);
+  };
 
   return (
-    <div className="app-container" style={{ display: 'flex', width: '100%', height: '100%', position: 'relative' }}>
+    <div className="app-container">
       <AmbientBackground />
 
-      {/* Sidebar */}
-      <aside className="glass-panel" style={{ width: '280px', margin: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px', zIndex: 10, position: 'relative' }}>
+      {/* ── Mobile Header ── */}
+      <header className="mobile-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src={kumarPhoto} alt="Kumar Gyanam" className="mobile-avatar" />
+          <div>
+            <h1 className="text-gradient" style={{ fontSize: '15px', margin: 0 }}>KUMAR GYANAM</h1>
+            <div style={{ fontSize: '10px', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'var(--accent-primary)', flexShrink: 0 }} className="animate-pulse" />
+              SYSTEM ONLINE V2.5
+            </div>
+          </div>
+        </div>
+        <button className="hamburger" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Toggle menu">
+          {sidebarOpen ? '✕' : '☰'}
+        </button>
+      </header>
+
+      {/* ── Drawer overlay ── */}
+      {sidebarOpen && <div className="drawer-overlay" onClick={() => setSidebarOpen(false)} />}
+
+      {/* ── Sidebar ── */}
+      <aside className={`glass-panel sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
 
         {/* Brand */}
         <div className="brand">
@@ -131,11 +164,7 @@ const App = () => {
             <img
               src={kumarPhoto}
               alt="Kumar Gyanam"
-              style={{
-                width: '56px', height: '56px', borderRadius: '50%',
-                objectFit: 'cover', border: '2px solid var(--accent-primary)',
-                boxShadow: '0 0 12px rgba(0, 255, 204, 0.35)', flexShrink: 0,
-              }}
+              style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-primary)', boxShadow: '0 0 12px rgba(0, 255, 204, 0.35)', flexShrink: 0 }}
             />
             <div>
               <h1 className="text-gradient" style={{ fontSize: '20px', margin: 0, letterSpacing: '-0.5px' }}>KUMAR GYANAM</h1>
@@ -147,26 +176,22 @@ const App = () => {
           </div>
 
           {/* Animated Stats Bar */}
-          <div style={{
-            display: 'flex', gap: '4px', padding: '10px 8px',
-            background: 'rgba(0,255,204,0.04)',
-            border: '1px solid rgba(0,255,204,0.12)',
-            borderRadius: '10px',
-          }}>
-            {STATS.map((s, i) => (
-              <StatItem key={i} value={s.value} suffix={s.suffix} label={s.label} />
-            ))}
+          <div style={{ display: 'flex', gap: '4px', padding: '10px 8px', background: 'rgba(0,255,204,0.04)', border: '1px solid rgba(0,255,204,0.12)', borderRadius: '10px' }}>
+            {STATS.map((s, i) => <StatItem key={i} value={s.value} suffix={s.suffix} label={s.label} />)}
           </div>
         </div>
 
         {/* Nav */}
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <NavItem color="#00ffcc" label="Digital Twin"       isActive={activeTab === 'twin'}             onClick={() => window.open('https://resume-rewrite-production.up.railway.app/', '_blank')} />
-          <NavItem color="#0088ff" label="Match Engine"       isActive={activeTab === 'reverse_interview'} onClick={() => setActiveTab('reverse_interview')} />
-          <NavItem color="#a78bfa" label="Architecture"       isActive={activeTab === 'architecture'}      onClick={() => setActiveTab('architecture')} />
-          <NavItem color="#fb923c" label="Thought Leadership" isActive={activeTab === 'thought'}           onClick={() => setActiveTab('thought')} />
-          <NavItem color="#34d399" label="Live Portfolio"     isActive={activeTab === 'portfolio'}         onClick={() => setActiveTab('portfolio')} />
-          <NavItem color="#f472b6" label="Deploy Me"          isActive={activeTab === 'deploy'}            onClick={() => setActiveTab('deploy')} />
+          {NAV_ITEMS.map(item => (
+            <NavItem
+              key={item.tab}
+              color={item.color}
+              label={item.label}
+              isActive={activeTab === item.tab}
+              onClick={() => handleNav(item.tab, item.external)}
+            />
+          ))}
         </nav>
 
         {/* Footer */}
@@ -177,16 +202,10 @@ const App = () => {
             <span style={{ color: 'var(--accent-primary)', fontSize: '11px' }}>Faculty: IIM Indore · ISB</span>
           </div>
           <a
-            href="https://chromewebstore.google.com/detail/ai-job-assistant/jfjimnkeogmhmgcigcecemijmhjgoppb"
+            href="https://chromewebstore.google.com/detail/ai-job-assistant/jfjimn keogmhmgcigcecemijmhjgoppb"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px',
-              padding: '7px 10px', borderRadius: '8px', textDecoration: 'none',
-              background: 'rgba(0,136,255,0.08)', border: '1px solid rgba(0,136,255,0.2)',
-              color: '#0088ff', fontSize: '11px', fontWeight: 600,
-              transition: 'background 0.2s ease',
-            }}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px', padding: '7px 10px', borderRadius: '8px', textDecoration: 'none', background: 'rgba(0,136,255,0.08)', border: '1px solid rgba(0,136,255,0.2)', color: '#0088ff', fontSize: '11px', fontWeight: 600, transition: 'background 0.2s ease' }}
             onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,136,255,0.15)'}
             onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,136,255,0.08)'}
           >
@@ -218,24 +237,37 @@ const App = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main style={{ flex: 1, margin: '16px 16px 16px 0', position: 'relative', overflow: 'hidden', zIndex: 10 }}>
+      {/* ── Main Content ── */}
+      <main className="main-content">
         {activeTab === 'reverse_interview' && <ReverseInterviewEngine />}
         {activeTab === 'architecture'      && <ArchitectureDiagram />}
         {activeTab === 'thought'           && <ThoughtLeadership />}
         {activeTab === 'portfolio'         && <LivePortfolio />}
         {activeTab === 'deploy'            && <DeployMe />}
-        {!['reverse_interview','architecture','thought','portfolio','deploy'].includes(activeTab) && (
-          <div className="glass-panel" style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {!['reverse_interview', 'architecture', 'thought', 'portfolio', 'deploy'].includes(activeTab) && (
+          <div className="glass-panel" style={{ height: '100%', minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <h2 style={{ color: 'var(--text-secondary)' }}>Module "{activeTab}" coming soon.</h2>
           </div>
         )}
       </main>
+
+      {/* ── Mobile Bottom Nav ── */}
+      <nav className="mobile-bottom-nav">
+        {NAV_ITEMS.map(item => (
+          <MobileNavItem
+            key={item.tab}
+            color={item.color}
+            label={item.label.split(' ')[0]}
+            isActive={activeTab === item.tab}
+            onClick={() => handleNav(item.tab, item.external)}
+          />
+        ))}
+      </nav>
     </div>
   );
 };
 
-// ── Icons ──────────────────────────────────────────────────────────────────
+// ── NavItem ────────────────────────────────────────────────────────────────
 const NavItem = ({ color, label, isActive, onClick }: { color: string; label: string; isActive: boolean; onClick: () => void }) => (
   <div
     onClick={onClick}
@@ -250,7 +282,6 @@ const NavItem = ({ color, label, isActive, onClick }: { color: string; label: st
     onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
     onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
   >
-    {/* Dot icon */}
     <div style={{
       width: '28px', height: '28px', borderRadius: '7px', flexShrink: 0,
       background: isActive ? `${color}25` : 'rgba(255,255,255,0.04)',
@@ -267,6 +298,24 @@ const NavItem = ({ color, label, isActive, onClick }: { color: string; label: st
     </div>
     <span style={{ fontWeight: 500, fontSize: '14px' }}>{label}</span>
   </div>
+);
+
+// ── MobileNavItem ──────────────────────────────────────────────────────────
+const MobileNavItem = ({ color, label, isActive, onClick }: { color: string; label: string; isActive: boolean; onClick: () => void }) => (
+  <button
+    onClick={onClick}
+    style={{
+      flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
+      justifyContent: 'center', gap: '3px', padding: '8px 2px',
+      background: 'transparent', border: 'none', cursor: 'pointer',
+      color: isActive ? color : 'var(--text-secondary)',
+      fontSize: '9px', fontWeight: isActive ? 700 : 400,
+      transition: 'color 0.2s ease',
+    }}
+  >
+    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: isActive ? color : 'transparent', boxShadow: isActive ? `0 0 6px ${color}` : 'none', marginBottom: '2px', transition: 'all 0.2s' }} />
+    {label}
+  </button>
 );
 
 export default App;
