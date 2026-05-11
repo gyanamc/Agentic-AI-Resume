@@ -24,13 +24,25 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
   background: radial-gradient(circle at 50% 0%, #1a1a2e, #050505 60%);
 }
 
 #root {
   width: 100vw;
   height: 100vh;
+}
+
+/* Mobile base overrides */
+@media (max-width: 768px) {
+  body {
+    overflow-y: auto;
+  }
+
+  #root {
+    height: auto;
+    min-height: 100vh;
+  }
 }
 
 /* Glassmorphism utilities */
@@ -58,4 +70,254 @@ body {
 
 .animate-pulse {
   animation: pulseGlow 2s infinite ease-in-out;
+}
+
+/* ─── ReverseInterviewEngine ─────────────────────────────── */
+.rie-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.rie-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rie-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.badge-green {
+  background: rgba(0, 255, 204, 0.1);
+  color: var(--accent-primary);
+  border: 1px solid rgba(0, 255, 204, 0.3);
+}
+
+.badge-blue {
+  background: rgba(0, 136, 255, 0.1);
+  color: var(--accent-secondary);
+  border: 1px solid rgba(0, 136, 255, 0.3);
+}
+
+.rie-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.rie-input-panel {
+  width: 50%;
+  padding: 24px;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.rie-output-panel {
+  width: 50%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.rie-textarea {
+  flex: 1;
+  min-height: 180px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  color: var(--text-primary);
+  font-family: monospace;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+}
+
+.rie-analyze-btn {
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .rie-container {
+    height: auto;
+    overflow: visible;
+  }
+
+  .rie-body {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .rie-input-panel,
+  .rie-output-panel {
+    width: 100%;
+    border-right: none;
+    overflow: visible;
+  }
+
+  .rie-input-panel {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .rie-textarea {
+    min-height: 140px;
+    flex: none;
+  }
+}
+
+/* ─── ArchitectureDiagram ────────────────────────────────── */
+.arch-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.arch-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.arch-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.arch-diagram {
+  flex: 1;
+  padding: 32px 24px;
+  overflow-y: auto;
+}
+
+.arch-nodes-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+}
+
+.arch-client-layer {
+  border: 1px dashed var(--text-secondary);
+  padding: 16px;
+  border-radius: 16px;
+  width: 100%;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.arch-row {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.arch-node {
+  width: 220px;
+  padding: 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Desktop slide-out panel */
+.arch-side-panel {
+  width: 340px;
+  border-left: 1px solid var(--border-color);
+  background: var(--panel-bg);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Mobile bottom sheet — hidden on desktop */
+.arch-bottom-sheet {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .arch-container {
+    height: auto;
+    overflow: visible;
+  }
+
+  .arch-body {
+    overflow: visible;
+    flex-direction: column;
+  }
+
+  .arch-diagram {
+    padding: 20px 16px;
+    overflow: visible;
+  }
+
+  .arch-nodes-wrapper {
+    gap: 20px;
+  }
+
+  .arch-node {
+    width: 100%;
+    max-width: 320px;
+    padding: 16px;
+  }
+
+  .arch-row {
+    gap: 16px;
+  }
+
+  /* Hide desktop side panel on mobile */
+  .arch-side-panel {
+    display: none !important;
+  }
+
+  /* Show bottom sheet on mobile */
+  .arch-bottom-sheet {
+    display: flex;
+    flex-direction: column;
+    border-top: 2px solid var(--border-color);
+    background: var(--panel-bg);
+    max-height: 60vh;
+    overflow-y: auto;
+  }
 }
