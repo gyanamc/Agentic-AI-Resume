@@ -160,10 +160,16 @@ RESUME_PATH = os.path.join(BASE_DIR, "data", "Kumar_Gyanam__Resume.pdf")
 
 @app.get("/api/download-resume")
 async def download_resume():
-    if not os.path.exists(RESUME_PATH):
+    # Try new filename first, fall back to old one
+    paths_to_try = [
+        os.path.join(BASE_DIR, "data", "Kumar_Gyanam__Resume.pdf"),
+        os.path.join(BASE_DIR, "data", "Kumar_Gyanam_Chief_AI_Architect_SBI_Card_Resume.pdf"),
+    ]
+    resume_file = next((p for p in paths_to_try if os.path.exists(p)), None)
+    if not resume_file:
         raise HTTPException(status_code=404, detail="Resume file not found.")
     return FileResponse(
-        RESUME_PATH,
+        resume_file,
         media_type="application/pdf",
         filename="Kumar_Gyanam_Resume.pdf",
         headers={"Content-Disposition": "attachment; filename=Kumar_Gyanam_Resume.pdf"}
