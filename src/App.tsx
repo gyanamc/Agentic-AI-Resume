@@ -85,14 +85,14 @@ const AmbientBackground = () => {
 
 // ── Nav config ─────────────────────────────────────────────
 const NAV_ITEMS = [
-  { color: '#a4ac86', label: 'Architecture',       tab: 'architecture'      },
-  { color: '#8bb8d0', label: 'Match Engine',        tab: 'reverse_interview' },
-  { color: '#c8a84b', label: 'Career Arc',          tab: 'career',  badge: 'NEW' },
-  { color: '#a4ac86', label: 'Skill DNA',           tab: 'skills',  badge: 'NEW' },
-  { color: '#c4a47e', label: 'Endorsements',        tab: 'endorse', badge: 'NEW' },
-  { color: '#c8a84b', label: 'Thought Leadership',  tab: 'thought'           },
-  { color: '#9da390', label: 'Live Portfolio',      tab: 'portfolio'         },
-  { color: '#c4a47e', label: 'Deploy Me',           tab: 'deploy'            },
+  { color: '#60a5fa', label: 'Architecture',       tab: 'architecture'      },  // blue
+  { color: '#34d399', label: 'Match Engine',        tab: 'reverse_interview' },  // emerald
+  { color: '#f59e0b', label: 'Career Arc',          tab: 'career',  badge: 'NEW' }, // amber
+  { color: '#a78bfa', label: 'Skill DNA',           tab: 'skills',  badge: 'NEW' }, // violet
+  { color: '#f472b6', label: 'Endorsements',        tab: 'endorse', badge: 'NEW' }, // pink
+  { color: '#fb923c', label: 'Thought Leadership',  tab: 'thought'           },  // orange
+  { color: '#2dd4bf', label: 'Live Portfolio',      tab: 'portfolio'         },  // teal
+  { color: '#e879f9', label: 'Deploy Me',           tab: 'deploy'            },  // fuchsia
 ];
 
 // ── Digital Twin Hero Card ─────────────────────────────────
@@ -271,28 +271,47 @@ const App = () => {
 
 // ── NavItem ────────────────────────────────────────────────
 const NavItem = ({ color, label, badge, isActive, onClick }: { color: string; label: string; badge?: string; isActive: boolean; onClick: () => void }) => (
-  <div className="nav-item"
+  <div
+    className={`nav-item${isActive ? ' nav-item-active' : ''}`}
     onClick={onClick}
     style={{
-      background:   isActive ? `${color}14` : 'transparent',
-      border:       isActive ? `1px solid ${color}38` : '1px solid transparent',
+      '--nav-color': color,
+      background:   isActive
+        ? `linear-gradient(135deg, ${color}18 0%, ${color}08 100%)`
+        : 'transparent',
+      border:       isActive ? `1px solid ${color}50` : '1px solid transparent',
       color:        isActive ? color : 'var(--text-secondary)',
-    }}
-    onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'rgba(164,172,134,0.05)'; }}
+      boxShadow:    isActive ? `inset 0 1px 0 ${color}20, 0 2px 12px ${color}15` : 'none',
+      backdropFilter: isActive ? 'blur(8px)' : 'none',
+      WebkitBackdropFilter: isActive ? 'blur(8px)' : 'none',
+    } as React.CSSProperties}
+    onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = `${color}08`; }}
     onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
   >
+    {/* Glowing left border indicator */}
+    <div style={{
+      position: 'absolute', left: 0, top: '20%', bottom: '20%',
+      width: isActive ? 3 : 0,
+      borderRadius: '0 3px 3px 0',
+      background: color,
+      boxShadow: isActive ? `0 0 8px ${color}, 0 0 16px ${color}80` : 'none',
+      transition: 'all 0.25s ease',
+    }} />
     <div style={{
       width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
-      background: isActive ? color : 'rgba(255,255,255,0.2)',
-      boxShadow:  isActive ? `0 0 8px ${color}` : 'none',
-      transition: 'all 0.2s',
+      background: isActive ? color : 'rgba(255,255,255,0.18)',
+      boxShadow:  isActive ? `0 0 10px ${color}, 0 0 20px ${color}60` : 'none',
+      transition: 'all 0.25s ease',
     }} />
-    <span style={{ fontWeight: 500, fontSize: 13, flex: 1 }}>{label}</span>
+    <span style={{ fontWeight: isActive ? 600 : 500, fontSize: 13, flex: 1, transition: 'font-weight 0.2s' }}>{label}</span>
     {badge && (
       <span style={{
         fontSize: 7.5, fontFamily: 'DM Mono, monospace', padding: '2px 6px',
-        borderRadius: 3, background: 'rgba(164,172,134,0.12)',
-        border: '1px solid rgba(164,172,134,0.25)', color: 'var(--olive)', letterSpacing: '.3px',
+        borderRadius: 3,
+        background: isActive ? `${color}20` : 'rgba(164,172,134,0.12)',
+        border: `1px solid ${isActive ? color + '40' : 'rgba(164,172,134,0.25)'}`,
+        color: isActive ? color : 'var(--olive)',
+        letterSpacing: '.3px',
       }}>{badge}</span>
     )}
   </div>

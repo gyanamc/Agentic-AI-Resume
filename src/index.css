@@ -685,9 +685,10 @@ body {
 }
 .nav-item {
   display: flex; align-items: center; gap: 10px;
-  padding: 9px 11px; border-radius: 10px;
+  padding: 9px 11px 9px 14px; border-radius: 10px;
   cursor: pointer; border: 1px solid transparent;
-  transition: all 0.15s ease; user-select: none;
+  transition: all 0.25s ease; user-select: none;
+  position: relative;
 }
 .nav-item:hover { background: rgba(164,172,134,0.05); }
 
