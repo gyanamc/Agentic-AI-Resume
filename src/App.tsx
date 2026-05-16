@@ -211,7 +211,14 @@ const App = () => {
 
         {/* Quick CTAs */}
         <div className="quick-ctas">
-          <button className="btn-primary-sidebar">📄 Download Resume</button>
+          <a
+            href="/Kumar_Gyanam_Resume.pdf"
+            download="Kumar_Gyanam_Resume.pdf"
+            className="btn-primary-sidebar"
+            style={{ textDecoration: 'none' }}
+          >
+            📄 Download Resume
+          </a>
           <button className="btn-sec-sidebar">🗓 Book 15-min Call</button>
         </div>
 
