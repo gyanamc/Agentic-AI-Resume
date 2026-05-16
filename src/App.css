@@ -1,33 +1,4 @@
-/* ─── Layout ─────────────────────────────────────────────── */
-.app-container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-
-.sidebar {
-  width: 280px;
-  min-width: 280px;
-  margin: 16px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  z-index: 10;
-  overflow-y: auto;
-}
-
-.brand {
-  margin-bottom: 8px;
-}
-
-.main-content {
-  flex: 1;
-  margin: 16px 16px 16px 0;
-  position: relative;
-  overflow: hidden;
-  min-height: 0;
-}
+/* App.css — mobile-only overrides. Desktop layout lives in index.css */
 
 /* ─── Mobile Header (hidden on desktop) ──────────────────── */
 .mobile-header {
@@ -42,18 +13,7 @@
   object-fit: cover;
 }
 
-.hamburger {
-  background: transparent;
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  font-size: 18px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  line-height: 1;
-}
-
-/* ─── Drawer overlay ─────────────────────────────────────── */
+/* ─── Drawer overlay (hidden on desktop) ─────────────────── */
 .drawer-overlay {
   display: none;
 }
@@ -65,22 +25,15 @@
 
 /* ─── Mobile breakpoint ──────────────────────────────────── */
 @media (max-width: 768px) {
-  .app-container {
-    flex-direction: column;
-    height: auto;
-    min-height: 100vh;
-  }
-
   /* Show mobile header */
   .mobile-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    background: var(--panel-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
+    background: rgba(6,12,6,0.95);
     border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(16px);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -88,21 +41,19 @@
 
   /* Sidebar becomes a slide-in drawer */
   .sidebar {
-    position: fixed;
-    top: 0;
+    position: fixed !important;
+    top: 57px;
     left: 0;
     bottom: 0;
-    width: 280px;
-    margin: 0;
-    border-radius: 0 16px 16px 0;
+    width: 280px !important;
     transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 200;
-    overflow-y: auto;
+    border-radius: 0 !important;
   }
 
   .sidebar-open {
-    transform: translateX(0);
+    transform: translateX(0) !important;
   }
 
   /* Dim overlay when drawer is open */
@@ -114,25 +65,17 @@
     z-index: 150;
   }
 
-  /* Main content fills screen between header and bottom nav */
-  .main-content {
-    flex: 1;
-    margin: 0;
-    padding: 12px;
-    overflow: visible;
-    min-height: calc(100vh - 57px - 60px); /* header + bottom nav */
-  }
-
   /* Show bottom nav */
   .mobile-bottom-nav {
     display: flex;
-    position: sticky;
+    position: fixed;
     bottom: 0;
-    background: var(--panel-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border-top: 1px solid var(--border-color);
+    left: 0;
+    right: 0;
     z-index: 100;
-    padding: 4px 0;
+    background: rgba(6,12,6,0.96);
+    border-top: 1px solid var(--border-color);
+    backdrop-filter: blur(16px);
+    padding: 6px 0;
   }
 }
