@@ -774,34 +774,39 @@ body {
 .dt-hero {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 14px 16px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px 16px;
+  min-height: 148px;
   border-radius: 14px;
-  background: linear-gradient(135deg, rgba(45,74,43,0.55) 0%, rgba(164,172,134,0.12) 100%);
-  border: 1px solid rgba(164,172,134,0.35);
+  /* Deep indigo/violet — distinct from forest green theme */
+  background: linear-gradient(135deg, #1e1245 0%, #2d1b69 50%, #1a0f3d 100%);
+  border: 1px solid rgba(139,92,246,0.45);
   text-decoration: none;
   position: relative;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 0 18px rgba(164,172,134,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+  box-shadow: 0 0 20px rgba(139,92,246,0.15), inset 0 1px 0 rgba(255,255,255,0.06);
   animation: dtPulse 3s ease-in-out infinite;
+  text-align: center;
 }
 .dt-hero:hover {
   transform: translateY(-2px);
-  border-color: rgba(164,172,134,0.6);
-  box-shadow: 0 0 28px rgba(164,172,134,0.22), inset 0 1px 0 rgba(255,255,255,0.07);
+  border-color: rgba(139,92,246,0.7);
+  box-shadow: 0 0 32px rgba(139,92,246,0.28), inset 0 1px 0 rgba(255,255,255,0.08);
 }
 @keyframes dtPulse {
-  0%, 100% { box-shadow: 0 0 18px rgba(164,172,134,0.10), inset 0 1px 0 rgba(255,255,255,0.05); }
-  50%       { box-shadow: 0 0 28px rgba(164,172,134,0.22), inset 0 1px 0 rgba(255,255,255,0.07); }
+  0%, 100% { box-shadow: 0 0 20px rgba(139,92,246,0.15), inset 0 1px 0 rgba(255,255,255,0.06); }
+  50%       { box-shadow: 0 0 32px rgba(139,92,246,0.28), inset 0 1px 0 rgba(255,255,255,0.08); }
 }
 
-/* Shimmer sweep */
+/* Shimmer sweep — kept as-is */
 .dt-hero-shimmer {
   position: absolute;
   inset: 0;
-  background: linear-gradient(105deg, transparent 40%, rgba(164,172,134,0.07) 50%, transparent 60%);
+  background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.08) 50%, transparent 65%);
   background-size: 200% 100%;
   animation: dtShimmer 3.5s linear infinite;
   pointer-events: none;
@@ -814,15 +819,15 @@ body {
 .dt-hero-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 10px;
 }
 .dt-hero-eyebrow {
   font-size: 9px;
   font-family: 'DM Mono', monospace;
   letter-spacing: 1.2px;
   text-transform: uppercase;
-  color: var(--olive);
-  opacity: 0.8;
+  color: rgba(196,181,253,0.75);
 }
 .dt-hero-live {
   display: flex;
@@ -831,9 +836,9 @@ body {
   font-size: 9px;
   font-family: 'DM Mono', monospace;
   letter-spacing: 1px;
-  color: #7dd47f;
-  background: rgba(91,187,94,0.1);
-  border: 1px solid rgba(91,187,94,0.25);
+  color: #86efac;
+  background: rgba(134,239,172,0.1);
+  border: 1px solid rgba(134,239,172,0.3);
   padding: 2px 7px;
   border-radius: 20px;
 }
@@ -841,37 +846,45 @@ body {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #5bbb5e;
+  background: #4ade80;
   animation: pulseGlow 1.6s infinite;
   flex-shrink: 0;
 }
 .dt-hero-title {
   font-family: 'Playfair Display', serif;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
-  color: var(--ivory);
+  color: #ede9fe;
   line-height: 1.1;
   letter-spacing: -0.3px;
 }
 .dt-hero-sub {
-  font-size: 11px;
-  color: var(--ivory-dim);
+  font-size: 10.5px;
+  color: rgba(196,181,253,0.8);
   line-height: 1.6;
-  opacity: 0.85;
+  max-width: 220px;
 }
 .dt-hero-cta {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 4px;
-  font-size: 11.5px;
+  margin-top: 2px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(139,92,246,0.25);
+  border: 1px solid rgba(139,92,246,0.5);
+  font-size: 11px;
   font-weight: 700;
-  color: var(--olive);
+  color: #c4b5fd;
   font-family: 'DM Sans', sans-serif;
   letter-spacing: 0.2px;
-  transition: gap 0.2s;
+  transition: all 0.2s;
 }
-.dt-hero:hover .dt-hero-cta { gap: 9px; }
+.dt-hero:hover .dt-hero-cta {
+  background: rgba(139,92,246,0.4);
+  gap: 9px;
+  color: #ede9fe;
+}
 
 /* Mobile Digital Twin button in bottom nav */
 .mobile-dt-btn {
