@@ -85,14 +85,14 @@ const AmbientBackground = () => {
 
 // ── Nav config ─────────────────────────────────────────────
 const NAV_ITEMS = [
-  { color: '#60a5fa', label: 'Architecture',       tab: 'architecture'      },  // blue
-  { color: '#34d399', label: 'Match Engine',        tab: 'reverse_interview' },  // emerald
-  { color: '#f59e0b', label: 'Career Arc',          tab: 'career',  badge: 'NEW' }, // amber
-  { color: '#a78bfa', label: 'Skill DNA',           tab: 'skills',  badge: 'NEW' }, // violet
-  { color: '#f472b6', label: 'Endorsements',        tab: 'endorse', badge: 'NEW' }, // pink
-  { color: '#fb923c', label: 'Thought Leadership',  tab: 'thought'           },  // orange
-  { color: '#2dd4bf', label: 'Live Portfolio',      tab: 'portfolio'         },  // teal
-  { color: '#e879f9', label: 'Deploy Me',           tab: 'deploy'            },  // fuchsia
+  { color: '#60a5fa', label: 'Architecture',       tab: 'architecture'      },
+  { color: '#34d399', label: 'Match Engine',        tab: 'reverse_interview' },
+  { color: '#f59e0b', label: 'Career Arc',          tab: 'career'            },
+  { color: '#a78bfa', label: 'Skill DNA',           tab: 'skills'            },
+  { color: '#f472b6', label: 'Endorsements',        tab: 'endorse'           },
+  { color: '#fb923c', label: 'Thought Leadership',  tab: 'thought'           },
+  { color: '#2dd4bf', label: 'Live Portfolio',      tab: 'portfolio'         },
+  { color: '#e879f9', label: 'Deploy Me',           tab: 'deploy'            },
 ];
 
 // ── Digital Twin Hero Card ─────────────────────────────────
