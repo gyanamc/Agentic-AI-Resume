@@ -212,7 +212,7 @@ const App = () => {
         {/* Quick CTAs */}
         <div className="quick-ctas">
           <a
-            href="/Kumar_Gyanam_Resume.pdf"
+            href="/api/download-resume"
             download="Kumar_Gyanam_Resume.pdf"
             className="btn-primary-sidebar"
             style={{ textDecoration: 'none' }}

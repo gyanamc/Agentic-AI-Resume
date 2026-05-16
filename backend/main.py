@@ -155,6 +155,20 @@ async def contact(request: ContactRequest):
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
+# ── Resume download endpoint ───────────────────────────────
+RESUME_PATH = os.path.join(BASE_DIR, "data", "Kumar_Gyanam__Resume.pdf")
+
+@app.get("/api/download-resume")
+async def download_resume():
+    if not os.path.exists(RESUME_PATH):
+        raise HTTPException(status_code=404, detail="Resume file not found.")
+    return FileResponse(
+        RESUME_PATH,
+        media_type="application/pdf",
+        filename="Kumar_Gyanam_Resume.pdf",
+        headers={"Content-Disposition": "attachment; filename=Kumar_Gyanam_Resume.pdf"}
+    )
+
 # Serve static files and SPA fallback
 DIST_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "dist")
 if os.path.exists(DIST_DIR):
