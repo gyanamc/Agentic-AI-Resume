@@ -134,9 +134,8 @@ const App = () => {
   const [activeTab, setActiveTab]   = useState('architecture');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const handleNav = (tab: string, external?: string) => {
-    if (external) { window.open(external, '_blank'); }
-    else { setActiveTab(tab); }
+  const handleNav = (tab: string) => {
+    setActiveTab(tab);
     setSidebarOpen(false);
   };
 
@@ -205,7 +204,7 @@ const App = () => {
               label={item.label}
               badge={item.badge}
               isActive={activeTab === item.tab}
-              onClick={() => handleNav(item.tab, item.external)}
+              onClick={() => handleNav(item.tab)}
             />
           ))}
         </div>
