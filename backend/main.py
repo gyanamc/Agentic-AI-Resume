@@ -109,6 +109,58 @@ class ContactRequest(BaseModel):
     recruiter_email: str
     message: str
 
+# ── Chat endpoint ──────────────────────────────────────────
+KB_PATH = os.path.join(BASE_DIR, "data", "kumar_knowledge_base.txt")
+_kb_text: str | None = None
+
+def get_kb_text() -> str:
+    global _kb_text
+    if _kb_text is None:
+        if os.path.exists(KB_PATH):
+            with open(KB_PATH, "r") as f:
+                _kb_text = f.read()
+        else:
+            _kb_text = ""
+    return _kb_text
+
+class ChatRequest(BaseModel):
+    message: str
+
+@app.post("/api/chat")
+async def chat(request: ChatRequest):
+    import openai
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="OPENAI_API_KEY is not set.")
+
+    kb = get_kb_text()
+    system_prompt = f"""You are Kumar Gyanam's personal AI assistant embedded in his interactive resume portfolio.
+Your job is to answer questions about Kumar's professional background, technical expertise, career history, achievements, and fit for roles — using ONLY the knowledge base below.
+
+Rules:
+- Answer in markdown format (use **bold**, bullet points, headers where appropriate)
+- Be concise but complete — 3-6 sentences or a short bullet list is ideal
+- Speak about Kumar in third person (e.g. "Kumar has..." not "I have...")
+- If asked about contact details, share: Email — gyanamc@gmail.com | LinkedIn — linkedin.com/in/kumar-gyanam
+- If a question is outside the knowledge base, say: "I don't have that specific detail, but you can reach Kumar directly at gyanamc@gmail.com"
+- Never make up facts not present in the knowledge base
+
+KNOWLEDGE BASE:
+{kb}
+"""
+
+    client = openai.OpenAI(api_key=api_key)
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        temperature=0.3,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": request.message},
+        ],
+    )
+    answer = response.choices[0].message.content
+    return {"answer": answer}
+
 @app.post("/api/contact")
 async def contact(request: ContactRequest):
     gmail_user = "gyanamc@gmail.com"

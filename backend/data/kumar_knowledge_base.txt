@@ -1,0 +1,147 @@
+Kumar Gyanam - Detailed RAG-Ready Professional Profile
+
+Purpose
+
+This document is an expanded, retrieval-friendly professional profile for Kumar Gyanam. It is designed to be ingested into a RAG ecosystem so that a LangGraph agent or other conversational AI assistant can answer questions about Kumar's experience, leadership, technical expertise, career history, projects, achievements, education, and professional positioning with rich context.
+
+CANONICAL IDENTITY
+
+Kumar Gyanam is a senior AI leader, Chief AI Architect, AI strategy leader, and enterprise technology executive based in Gurgaon, India. He has around 20 years of professional experience across generative AI, agentic systems, analytics, technology architecture, business intelligence, fintech, healthcare, media, banking, ad-tech, and enterprise transformation.
+
+Kumar is currently Deputy Vice President - Generative & Agentic AI at SBI Card in Gurgaon, India, where he owns and leads the Generative AI and Agentic AI function. His current work focuses on secure, sovereign, on-premise AI for regulated financial environments, including air-gapped RAG ecosystems, multi-agent orchestration, LLM serving, LLM fine-tuning, enterprise automation, guardrails, evaluation, and AI governance.
+
+Kumar can be positioned as a builder-leader: someone who combines board-level AI strategy, hands-on architecture, production implementation, vendor and procurement leadership, and teaching or thought leadership.
+
+Contact: Location — Gurgaon, India. Phone — +91 9953682525. Email — gyanamc@gmail.com. LinkedIn — linkedin.com/in/kumar-gyanam. GitHub — github.com/gyanamc.
+
+SHORT PROFESSIONAL BIO
+
+Kumar Gyanam is a transformational AI leader with 20 years of experience architecting enterprise-scale AI, analytics, and technology systems across fintech, healthcare, media, banking, and social media. He is the Deputy Vice President - Generative & Agentic AI at SBI Card, where he leads a cross-functional AI function and has architected a sovereign, air-gapped Agentic RAG platform for regulated fintech use cases. The platform serves 22M+ users, supports 21M+ monthly transactions, runs at 99.9% uptime, and is designed to keep enterprise data inside the organisational perimeter with zero third-party data exposure.
+
+His expertise spans LangGraph, LangChain, Agentic RAG, vLLM, Ray Serve, open-source LLMs, LoRA and PEFT fine-tuning, vector search, guardrails, MLflow, Ragas, Kubernetes, Docker, FastAPI, and enterprise automation with n8n. Kumar has shipped 30+ production AI systems and has built or led AI products across customer care, semantic search, personalised offers, internal developer productivity, fraud detection, ambulance dispatch optimisation, recommendation engines, and campaign optimisation.
+
+Kumar is also a guest faculty member at IIM Indore and ISB for executive MBA programmes, where he teaches AI strategy, technology leadership, AI governance, generative AI for business, and responsible AI.
+
+CURRENT ROLE: DEPUTY VICE PRESIDENT — GENERATIVE & AGENTIC AI, SBI CARD (April 2023 – Present)
+
+Kumar joined SBI Card in April 2023. SBI Card is one of India's largest credit card companies, operating in a tightly regulated financial services environment. Kumar heads a cross-functional team of 15+ people comprising internal engineers, data scientists, and vendor partners — notably DXC Technology for on-premise GPU infrastructure. He is accountable for multi-million dollar AI procurement, vendor evaluation, and the board-level AI roadmap.
+
+Sovereign On-Premise Agentic RAG Platform — The Flagship Achievement:
+Kumar architected and operationalised a secure, air-gapped RAG ecosystem — described as the first of its kind in Indian fintech. The platform is air-gapped meaning no user query, retrieved document, model input, or model output ever traverses external networks or reaches third-party API providers. Everything — inference, retrieval, fine-tuning, evaluation — runs on SBI Card's own infrastructure.
+
+The platform integrates 45+ enterprise components:
+- Orchestration layer: LangGraph for stateful multi-agent coordination and LangChain for pipeline management
+- Inference layer: vLLM with PagedAttention for high-throughput serving, Ray Serve for distributed model routing across NVIDIA A40 GPUs
+- Model layer: Three open-source LLMs with intelligent routing — Mistral 7B (<500 token tasks), GPT-OSS 20B (24K-token long context), Gemma 7B (structured reasoning)
+- Fine-tuning layer: LoRA/PEFT applied to adapt all models to SBI Card's proprietary product and policy data
+- Retrieval layer: all-MiniLM-L6-v2 embeddings indexed in Elasticsearch kNN for semantic search
+- Safety layer: Guardrails.ai pre/post pipeline for PII detection, toxicity screening, prompt injection prevention, and hallucination validation
+- Evaluation layer: Ragas (faithfulness 0.90, relevancy 0.94) + MLflow tracking + Prometheus/Grafana infrastructure observability
+
+The platform serves 22M+ users and processes 21M+ monthly transactions at 99.9% uptime SLA, with zero third-party data exposure.
+
+Strategic Business Applications at SBI Card:
+1. SBICard.com Web Search Revamp — Re-architected website search using Generative AI-powered semantic search, replacing keyword-based lookup with intent-aware contextual retrieval, significantly improving product discoverability and customer self-service rates.
+2. SBI Card Offers Reinvention with RAG — Built a RAG-powered offers recommendation engine dynamically surfacing personalised card offers based on customer spending patterns, directly contributing to 400% growth in AI-driven bill payments.
+3. Generative AI Assist for Customer Care — Deployed a real-time AI co-pilot for customer care agents generating contextual, policy-compliant responses during live interactions, achieving 75+ FTE cost savings and reducing Average Handle Time.
+4. SBI Card Internal GPT for Developers — Built a secure, air-gapped internal GPT portal enabling engineering and product teams to interact with internal codebases and API documentation without data leaving the perimeter.
+
+Leadership & Governance:
+- Authored the board-approved AI roadmap driving enterprise-wide AI transformation strategy
+- Led multi-million dollar AI procurement, vendor evaluation, and ecosystem partnerships across DXC Technology, NVIDIA, and specialist AI vendors
+
+PREVIOUS ROLE: ANALYTICS DELIVERY HEAD, BRANE GROUP (January 2022 – April 2023)
+
+Kumar led a 45-member cross-functional analytics and engineering team delivering production AI/ML systems for global clients across healthcare, fintech, and ad-tech verticals.
+- Architected ML-powered ambulance dispatch optimisation (healthcare), fraud detection (financial risk), and campaign ROI optimisation (ad-tech)
+- Owned full project delivery lifecycle from client discovery and solution architecture through to model deployment and handover
+- Established delivery standards and engineering practices, reducing project cycle time across the team
+
+PREVIOUS ROLE: HEAD OF TECHNOLOGY ARCHITECTURE, PIXSTORY (January 2019 – January 2022)
+
+Led technology architecture and product engineering for a social media platform, managing cross-functional delivery across ML, backend, and product teams.
+- Built a custom ML-based recommendation engine from scratch, achieving 180% improvement in user engagement
+- Architected semantic analysis and automated tagging workflows processing 1M+ posts
+- Led technical product strategy and go-to-market execution supporting 100K+ user acquisition
+
+PREVIOUS ROLE: CHIEF MANAGER — BUSINESS INTELLIGENCE, THE INDIAN EXPRESS (July 2009 – January 2019)
+
+Nearly a decade in analytics and business intelligence leadership in the media industry.
+- Transformed subscription architecture and built predictive analytics for collection management
+- Reduced user detractors by 50% through text mining and continuous consumer research
+
+EARLIER CAREER:
+- Sales Manager, Axis Bank (August 2008 – July 2009)
+- Sales Manager, ICICI Bank (June 2006 – August 2008)
+
+TECHNICAL EXPERTISE
+
+Agentic AI & Orchestration: LangGraph (Stateful Agents), LangChain, n8n (Expert — 30+ workflows), Agentic RAG Workflows, Human-in-the-Loop (HITL) Architecture
+
+LLM Inference & Serving: vLLM (PagedAttention), Ray Serve (Distributed), GPT-OSS 20B, Mistral 7B, Gemma 7B, intelligent model routing
+
+LLM Fine-Tuning: LoRA, PEFT — domain-adaptive fine-tuning of open-source models on proprietary enterprise data, all on-premise
+
+Embedding & Vector Search: all-MiniLM-L6-v2, Elasticsearch kNN, Semantic Retrieval, Intent-Aware Contextual Retrieval
+
+Guardrails & Safety: Guardrails.ai (Pre/Post), PII Detection, Toxicity Screening, Prompt Injection Prevention, Hallucination Validation, Multilingual Safeguards
+
+MLOps & Observability: MLflow, Ragas (RAG Evaluation — faithfulness 0.90, relevancy 0.94), Airflow, Prometheus, Grafana
+
+Infrastructure & Platforms: On-Premise GPU Infrastructure (NVIDIA A40, DXC Technology), Docker, Kubernetes, AWS, Firebase
+
+APIs & Automation: FastAPI, n8n.io (Expert — 30+ workflows), REST, Python
+
+PRODUCTS SHIPPED
+
+1. Agentic AI Resume — Interactive AI portfolio where recruiters can converse with career history, run JD match analysis, and view live architecture diagrams. Deployed at agentic-ai-resume-production.up.railway.app
+2. AI Job Assistant (Chrome Extension) — Agentic AI Chrome extension for real-time job analysis, CV tailoring, and application assistance. Live on Chrome Web Store.
+3. Live AI Portfolio — 30+ production AI systems across Agentic RAG, LLM fine-tuning, automation, and enterprise GenAI. At ai-showcase-site-production.up.railway.app
+4. Open-Source Repositories — Public repositories on GitHub (github.com/gyanamc) covering Agentic AI, RAG systems, and automation workflows.
+
+THOUGHT LEADERSHIP & TEACHING
+
+Kumar is Guest Faculty at IIM Indore (AI Strategy, Technology Leadership, AI Governance) and ISB — Indian School of Business (Generative AI for Business, Responsible AI). He teaches Executive MBA cohorts of 100–200 students per session. Both are ongoing engagements.
+
+He writes actively on LinkedIn (linkedin.com/in/kumar-gyanam) about Generative AI architecture, Agentic AI systems, sovereign AI for regulated industries, LLM fine-tuning trade-offs, RAG evaluation frameworks, and multi-agent orchestration patterns. His content is practitioner-focused, drawn from real production experience.
+
+EDUCATION
+
+- IIM Indore — Guest Faculty, AI Strategy, Technology Leadership & AI Governance (Ongoing)
+- ISB (Indian School of Business) — Guest Faculty, Generative AI for Business & Responsible AI (Ongoing)
+- IIT Madras — Advanced Diploma in Programming. Selected via competitive entrance — 1 of ~1,000 admitted from 60,000+ applicants (top 1.7%); completed Semester 1; discontinued due to professional commitments
+- IIM Calcutta — AI-Powered Marketing (2021–2022)
+- IRM — MBA, Marketing & Strategic Management (2004–2006)
+- Ranchi University — B.Sc., Mathematics & Statistics (2001–2004)
+
+KEY ACHIEVEMENTS & METRICS
+
+- 22M+ users served on sovereign conversational AI platform
+- 21M+ monthly transactions processed through the AI pipeline
+- 99.9% uptime SLA maintained at production scale
+- Zero third-party data exposure — all AI processing on-premise
+- 400% growth in AI-driven bill payments through RAG-powered offers engine
+- 75+ FTE saved through AI automation in customer care
+- 45+ enterprise components integrated into a single coherent AI platform
+- 30+ production AI systems shipped across multiple industries
+- RAG faithfulness score: 0.90 | RAG relevancy score: 0.94 at scale
+- 180% improvement in user engagement via recommendation engine at Pixstory
+- 50% reduction in user detractors at The Indian Express
+- Top 1.7% selection rate at IIT Madras (1 of ~1,000 from 60,000+ applicants)
+- 30+ n8n automation workflows built and deployed
+- Led a 45-member analytics and engineering team at Brane Group
+- Led a 15+ member cross-functional AI team at SBI Card
+
+PROFESSIONAL POSITIONING
+
+Kumar should be positioned as a senior AI leader who operates across four levels:
+1. Strategy: Owns board-level AI roadmaps, defines enterprise transformation direction, advises senior stakeholders, aligns AI investments with business value.
+2. Architecture: Designs secure, scalable, on-premise, agentic, and RAG-based AI systems for high-scale regulated environments.
+3. Delivery: Leads teams, vendors, procurement, infrastructure, model deployment, evaluation, observability, and production rollout.
+4. Thought Leadership: Teaches AI strategy and governance at IIM Indore and ISB, writes publicly about AI, builds public-facing AI products.
+
+Kumar's differentiator is the combination of executive leadership and real production architecture. He is not only a strategist who talks about AI transformation, and not only an engineer focused on isolated implementation. His strength is joining both worlds: enterprise-grade system design, business use-case ownership, governance, model infrastructure, security, evaluation, and measurable outcomes.
+
+AREAS OF EXPERTISE (TAGS)
+
+Generative AI · Agentic AI · RAG Systems · LLM Orchestration · LLM Fine-Tuning · LoRA · PEFT · On-Premise AI · Sovereign AI · Air-Gapped AI · AI Governance · LangGraph · LangChain · vLLM · PagedAttention · Ray Serve · FastAPI · Guardrails.ai · MLflow · Ragas · AI Strategy · Board-Level AI Roadmaps · Enterprise AI Transformation · Fintech AI · Regulated AI · Multi-Agent Systems · HITL Architecture · Vector Search · Elasticsearch kNN · n8n · Workflow Automation · Docker · Kubernetes · AWS · Firebase · Python · NVIDIA A40 · GPU Infrastructure · DXC Technology · Mistral 7B · GPT-OSS 20B · Gemma 7B · all-MiniLM-L6-v2 · Semantic Search · Intent-Aware Retrieval · Prompt Engineering · PII Detection · Toxicity Screening · Hallucination Validation · MLOps · Observability · Prometheus · Grafana · Airflow · Recommendation Systems · Customer Care AI · Conversational AI · Fraud Detection · Ambulance Dispatch Optimisation · Campaign ROI Optimisation · Chief AI Architect · AI Strategy Leader · Executive MBA Teaching · IIM Indore · ISB · SBI Card · Brane Group · Pixstory · The Indian Express · Gurgaon · India
