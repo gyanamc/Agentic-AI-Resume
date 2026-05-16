@@ -219,7 +219,6 @@ const App = () => {
           >
             📄 Download Resume
           </a>
-          <button className="btn-sec-sidebar">🗓 Book 15-min Call</button>
         </div>
 
         {/* Footer */}
@@ -227,25 +226,6 @@ const App = () => {
           <strong>Chief AI Architect</strong><br />
           SBI Card · Gurgaon, India<br />
           <span className="sidebar-footer-badge">★ Faculty: IIM Indore · ISB</span>
-        </div>
-
-        {/* Master CV upload */}
-        <div>
-          <input type="file" id="masterCvInput" accept="application/pdf" style={{ display: 'none' }}
-            onChange={async e => {
-              if (e.target.files?.[0]) {
-                const fd = new FormData(); fd.append('file', e.target.files[0]);
-                try {
-                  const res = await fetch('/api/upload_cv', { method: 'POST', body: fd });
-                  alert(res.ok ? 'Master CV Updated!' : 'Failed to update CV');
-                } catch { alert('Error uploading CV'); }
-              }
-            }}
-          />
-          <button onClick={() => document.getElementById('masterCvInput')?.click()}
-            style={{ background: 'transparent', border: '1px dashed var(--border-color)', color: 'var(--text-secondary)', padding: '6px 12px', borderRadius: 4, cursor: 'pointer', fontSize: 11, width: '100%', fontFamily: 'DM Sans, sans-serif' }}>
-            ⚙️ Update Master CV
-          </button>
         </div>
       </aside>
 
