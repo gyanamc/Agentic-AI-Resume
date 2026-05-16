@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Kumar Gyanam — Chief AI Architect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════
+   FOREST CANOPY THEME
+   Green: #2d4a2b  Sage: #7d8471
+   Olive: #a4ac86  Ivory: #faf9f6
+   ════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Forest Canopy palette */
+  --forest:#2d4a2b;
+  --forest-deep:#1a2e19;
+  --forest-mid:#243d22;
+  --sage:#7d8471;
+  --sage-light:#9da390;
+  --olive:#a4ac86;
+  --olive-light:#c2c9a8;
+  --ivory:#faf9f6;
+  --ivory-dim:rgba(250,249,246,0.75);
+  --ivory-mute:rgba(250,249,246,0.38);
+  --ivory-faint:rgba(250,249,246,0.12);
+
+  /* Backgrounds */
+  --bg0:#080e08;
+  --bg1:#0d160c;
+  --bg2:#121c11;
+  --bg3:#172215;
+  --bg4:#1c2a1a;
+
+  /* Borders */
+  --b1:rgba(164,172,134,0.10);
+  --b2:rgba(164,172,134,0.18);
+  --b3:rgba(164,172,134,0.28);
+
+  /* Accents */
+  --gold:#c8a84b;
+  --gold-d:rgba(200,168,75,0.12);
+  --amber:#d4891a;
+  --rust:#c0613a;
+  --bark:#8b6343;
+  --moss:#4a6741;
+  --sky:#5b8fa8;
+
+  /* Type */
+  --fh:'Playfair Display',Georgia,serif;
+  --fb:'DM Sans',sans-serif;
+  --fm:'DM Mono',monospace;
+
+  /* Layout */
+  --sw:278px;
+  --r6:6px;--r10:10px;--r14:14px;--r20:20px;
+}
+html,body{background:var(--bg0);color:var(--ivory);font-family:var(--fb);height:100%;overflow:hidden;font-size:14px}
+
+/* ── CANVAS ── */
+#cnv{position:fixed;inset:0;pointer-events:none;z-index:0}
+
+/* ── LAYOUT ── */
+.wrap{display:flex;height:100vh;position:relative;z-index:1}
+
+/* ════════════════════════
+   SIDEBAR
+   ════════════════════════ */
+.sb{
+  width:var(--sw);flex-shrink:0;
+  background:rgba(8,14,8,0.92);
+  border-right:1px solid var(--b1);
+  backdrop-filter:blur(28px);
+  display:flex;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;
+  padding:20px 16px 18px;gap:16px;
+}
+.sb::-webkit-scrollbar{width:3px}
+.sb::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
+
+/* Profile card */
+.prof-card{
+  padding:16px;
+  background:linear-gradient(145deg,rgba(45,74,43,0.35),rgba(18,28,17,0.6));
+  border:1px solid var(--b2);border-radius:var(--r14);
+  position:relative;overflow:hidden;
+}
+.prof-card::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:130px;height:130px;
+  background:radial-gradient(circle,rgba(164,172,134,0.09),transparent 70%);
+  pointer-events:none;
+}
+.pr{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.av-wrap{position:relative;flex-shrink:0}
+.av-ring{
+  width:52px;height:52px;border-radius:50%;
+  padding:2.5px;
+  background:conic-gradient(var(--olive),var(--sage),var(--forest),var(--olive));
+}
+.av{
+  width:100%;height:100%;border-radius:50%;
+  background:var(--bg4);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fh);font-size:15px;font-weight:700;color:var(--olive);
+  overflow:hidden;
+}
+.av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.pstatus{
+  position:absolute;bottom:0;right:0;
+  width:13px;height:13px;border-radius:50%;
+  background:#5bbb5e;border:2px solid var(--bg0);
+  animation:pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(91,187,94,0.5)}50%{box-shadow:0 0 0 5px rgba(91,187,94,0)}}
+.pname{font-family:var(--fh);font-size:15.5px;font-weight:800;line-height:1.2;letter-spacing:-.2px}
+.pname em{color:var(--olive);font-style:normal}
+.ptag{font-family:var(--fm);font-size:9px;color:var(--sage);letter-spacing:.8px;text-transform:uppercase;margin-top:3px;display:flex;align-items:center;gap:4px}
+.pdot{width:5px;height:5px;border-radius:50%;background:#5bbb5e;animation:blink 1.8s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.avail-pill{
+  display:flex;align-items:center;gap:7px;
+  padding:6px 10px;
+  background:rgba(91,187,94,0.06);
+  border:1px solid rgba(91,187,94,0.2);
+  border-radius:var(--r6);
+  font-size:10px;font-family:var(--fm);color:#7dd47f;
+}
+
+/* Stats */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sc{
+  background:var(--bg3);border:1px solid var(--b1);
+  border-radius:var(--r10);padding:10px 12px;
+  text-align:center;cursor:default;
+  transition:border-color .2s,transform .15s;
+}
+.sc:hover{border-color:var(--b2);transform:translateY(-1px)}
+.sv{font-family:var(--fh);font-size:20px;font-weight:800;color:var(--olive);line-height:1}
+.su{font-size:8px;color:var(--olive);font-family:var(--fh);opacity:.8}
+.sl{font-size:9px;color:var(--sage);text-transform:uppercase;letter-spacing:.5px;margin-top:3px;font-family:var(--fm)}
+
+/* Nav */
+.nav-section{display:flex;flex-direction:column;gap:3px}
+.nav-lbl{font-size:9px;font-family:var(--fm);color:var(--sage);opacity:.6;text-transform:uppercase;letter-spacing:1.2px;padding:0 8px;margin-bottom:4px}
+.ni{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 11px;border-radius:var(--r10);
+  cursor:pointer;border:1px solid transparent;
+  transition:all .15s ease;user-select:none;
+}
+.ni:hover{background:rgba(164,172,134,0.05)}
+.ni.act{background:var(--ni-bg,rgba(164,172,134,0.1));border-color:var(--ni-br,var(--b2))}
+.ni-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--ni-c,var(--olive));
+  box-shadow:0 0 0 2px var(--bg0);
+  flex-shrink:0;transition:box-shadow .2s;
+}
+.ni.act .ni-dot{box-shadow:0 0 8px var(--ni-c,var(--olive))}
+.ni-label{font-size:12.5px;font-weight:500;flex:1;color:var(--sage-light);transition:color .15s}
+.ni.act .ni-label{color:var(--ni-c,var(--olive))}
+.ni-badge{
+  font-size:7.5px;font-family:var(--fm);padding:2px 6px;border-radius:3px;
+  background:rgba(164,172,134,0.12);border:1px solid var(--b2);
+  color:var(--olive);letter-spacing:.3px;
+}
+
+/* Quick CTAs */
+.qcta{display:flex;flex-direction:column;gap:7px;padding-top:14px;border-top:1px solid var(--b1)}
+.btn-primary{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px 14px;border-radius:var(--r10);border:none;
+  background:var(--olive);color:var(--bg0);
+  font-weight:700;font-size:12px;cursor:pointer;
+  font-family:var(--fb);letter-spacing:.2px;transition:all .2s;
+}
+.btn-primary:hover{background:var(--olive-light);transform:translateY(-1px)}
+.btn-sec{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 14px;border-radius:var(--r10);
+  background:transparent;border:1px solid var(--b2);
+  color:var(--sage-light);font-weight:500;font-size:12px;
+  cursor:pointer;font-family:var(--fb);transition:all .2s;
+}
+.btn-sec:hover{background:rgba(164,172,134,0.07);color:var(--ivory)}
+
+.sfoot{font-family:var(--fb);font-size:10.5px;color:var(--sage);line-height:1.8}
+.sfoot strong{color:var(--ivory-dim);font-weight:500}
+.sfoot-badge{color:var(--olive);font-family:var(--fm);font-size:10px}
+
+/* ════════════════════════
+   MAIN CONTENT
+   ════════════════════════ */
+.main{flex:1;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth}
+.main::-webkit-scrollbar{width:4px}
+.main::-webkit-scrollbar-thumb{background:var(--b2);border-radius:4px}
+
+.tab{display:none;padding:28px 30px;min-height:100vh;flex-direction:column;gap:22px;animation:fadein .3s ease}
+.tab.act{display:flex}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* Page header */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ph-left{}
+.page-title{font-family:var(--fh);font-size:26px;font-weight:800;letter-spacing:-.4px;line-height:1.2}
+.page-sub{font-size:13px;color:var(--sage);margin-top:5px;line-height:1.55}
+.badges{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-family:var(--fm);padding:4px 9px;border-radius:20px;font-weight:500;letter-spacing:.2px}
+.b-olive{background:rgba(164,172,134,.12);border:1px solid rgba(164,172,134,.28);color:var(--olive)}
+.b-sage{background:rgba(125,132,113,.1);border:1px solid rgba(125,132,113,.25);color:var(--sage-light)}
+.b-green{background:rgba(91,143,94,.1);border:1px solid rgba(91,143,94,.25);color:#7dd47f}
+.b-gold{background:rgba(200,168,75,.1);border:1px solid rgba(200,168,75,.25);color:var(--gold)}
+.b-sky{background:rgba(91,143,168,.1);border:1px solid rgba(91,143,168,.25);color:#8bb8d0}
+.b-bark{background:rgba(139,99,67,.12);border:1px solid rgba(139,99,67,.28);color:#c4a47e}
+
+/* Glass card */
+.card{
+  background:rgba(12,19,11,0.75);
+  border:1px solid var(--b1);border-radius:var(--r14);
+  backdrop-filter:blur(14px);transition:border-color .2s;
+}
+.card:hover{border-color:var(--b2)}
+
+/* Tag chips */
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{display:inline-flex;font-size:10.5px;padding:3px 9px;border-radius:4px;background:rgba(164,172,134,0.07);border:1px solid var(--b1);color:var(--sage-light)}
+
+/* ════════════ ARCHITECTURE ════════════ */
+.arch-canvas{display:flex;flex-direction:column;align-items:center;gap:8px;padding:22px 18px}
+.arch-client{
+  width:100%;max-width:620px;
+  padding:10px 20px;
+  border:1.5px dashed rgba(164,172,134,0.18);
+  border-radius:var(--r10);text-align:center;
+  font-size:11px;color:var(--sage);font-family:var(--fm);letter-spacing:.3px;
+}
+.arch-arrow{display:flex;flex-direction:column;align-items:center;gap:0}
+.arr-line{width:1.5px;height:18px;background:linear-gradient(to bottom,rgba(164,172,134,.2),rgba(164,172,134,.06))}
+.arr-tip{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:6px solid rgba(164,172,134,.2)}
+.anode{
+  padding:13px 20px;border-radius:var(--r10);cursor:pointer;
+  border:1.5px solid var(--an-b,var(--b1));
+  background:var(--an-bg,var(--bg3));
+  text-align:center;transition:all .2s;min-width:200px;
+}
+.anode:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.5);border-color:var(--an-c)}
+.anode.sel{border-color:var(--an-c);box-shadow:0 0 20px rgba(164,172,134,.07)}
+.an-title{font-family:var(--fh);font-weight:700;font-size:13px;color:var(--an-c,var(--olive))}
+.an-sub{font-size:9.5px;color:var(--sage);font-family:var(--fm);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+.arch-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.arch-detail{
+  width:100%;max-width:620px;margin-top:4px;
+  padding:16px 20px;
+  background:rgba(45,74,43,.12);
+  border:1px solid rgba(164,172,134,.18);
+  border-radius:var(--r10);
+  animation:fadein .22s ease;
+}
+.ad-title{font-family:var(--fh);font-size:14px;font-weight:700;color:var(--olive);margin-bottom:8px}
+.ad-body{font-size:12.5px;color:var(--ivory-dim);line-height:1.7}
+.arch-hint{text-align:center;font-size:10.5px;color:var(--sage);font-family:var(--fm);padding:10px;letter-spacing:.4px;opacity:.7}
+
+/* ════════════ MATCH ENGINE ════════════ */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.match-in{display:flex;flex-direction:column;gap:10px;padding:20px}
+.url-row{display:flex;gap:8px}
+.url-inp{
+  flex:1;background:rgba(255,255,255,.03);border:1px solid var(--b1);
+  border-radius:var(--r6);padding:9px 13px;
+  color:var(--ivory);font-size:12px;outline:none;font-family:var(--fb);
+  transition:border-color .2s;
+}
+.url-inp:focus{border-color:var(--b3)}.url-inp::placeholder{color:var(--sage);opacity:.7}
+.url-btn{
+  padding:9px 13px;background:rgba(164,172,134,.1);border:1px solid var(--b2);
+  border-radius:var(--r6);color:var(--olive);font-size:11px;font-weight:600;
+  cursor:pointer;font-family:var(--fb);transition:all .2s;white-space:nowrap;
+}
+.url-btn:hover{background:rgba(164,172,134,.18)}
+.divider{text-align:center;font-size:10px;color:var(--sage);font-family:var(--fm);opacity:.6}
+.jd-area{
+  flex:1;background:rgba(255,255,255,.02);border:1px solid var(--b1);
+  border-radius:var(--r10);padding:14px;
+  color:var(--ivory);font-family:var(--fm);font-size:12px;resize:none;
+  min-height:240px;outline:none;line-height:1.7;transition:border-color .2s;
+}
+.jd-area:focus{border-color:var(--b2)}.jd-area::placeholder{color:var(--sage);opacity:.6}
+.match-btn{
+  padding:13px;border:none;border-radius:var(--r10);
+  background:linear-gradient(135deg,var(--forest),var(--moss));
+  color:var(--ivory);font-weight:700;font-size:14px;
+  cursor:pointer;font-family:var(--fh);letter-spacing:.3px;transition:all .2s;
+}
+.match-btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.match-out{display:flex;flex-direction:column;gap:14px;padding:20px}
+.idle-state{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;
+}
+.idle-icon{
+  width:56px;height:56px;border-radius:14px;
+  border:2px dashed var(--b2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;opacity:.6;
+}
+.idle-txt{font-size:12px;color:var(--sage);font-family:var(--fm);letter-spacing:.4px}
+.idle-sub{font-size:11px;color:var(--sage);opacity:.6}
+.result-block{display:flex;flex-direction:column;gap:13px;animation:fadein .4s ease}
+.score-ring{
+  display:flex;align-items:center;gap:18px;
+  padding:18px;background:rgba(45,74,43,.18);
+  border:1px solid rgba(164,172,134,.18);border-radius:var(--r10);
+}
+.score-num{font-family:var(--fh);font-size:52px;font-weight:800;color:var(--olive);line-height:1}
+.score-lbl{font-size:11.5px;color:var(--sage);margin-bottom:4px}
+.score-reason{font-size:12.5px;font-weight:600;color:var(--ivory);line-height:1.45}
+.plan-label{font-size:9.5px;font-family:var(--fm);color:var(--sage);text-transform:uppercase;letter-spacing:.8px}
+.plan-item{
+  padding:11px 14px;background:var(--bg3);
+  border:1px solid var(--b1);border-radius:var(--r6);
+  border-left:3px solid var(--pi-c);
+}
+.pi-day{font-size:9px;font-family:var(--fm);color:var(--pi-c);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.pi-txt{font-size:12px;color:var(--ivory-dim);line-height:1.6}
+
+/* ════════════ CAREER ARC ════════════ */
+.timeline{position:relative;padding:6px 0 6px 32px}
+.tl-line{
+  position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:linear-gradient(to bottom,var(--gold),var(--olive),var(--sage),rgba(125,132,113,.2));
+  border-radius:2px;
+}
+.tl-item{position:relative;padding:0 0 28px 26px}
+.tl-dot{
+  position:absolute;left:-7px;top:5px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--td-c);border:3px solid var(--bg0);
+  box-shadow:0 0 10px var(--td-c);transition:transform .2s;
+}
+.tl-item:hover .tl-dot{transform:scale(1.3)}
+.tl-year{font-size:9.5px;font-family:var(--fm);color:var(--td-c);letter-spacing:1px;margin-bottom:4px}
+.tl-role{font-family:var(--fh);font-size:16px;font-weight:700;margin-bottom:2px}
+.tl-org{font-size:12px;color:var(--sage);margin-bottom:9px}
+
+/* ════════════ SKILL DNA ════════════ */
+.skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.radar-wrap{display:flex;flex-direction:column;align-items:center;padding:24px 20px;gap:12px}
+.skill-lbl{font-size:10px;font-family:var(--fm);color:var(--sage);text-transform:uppercase;letter-spacing:.7px;opacity:.75}
+.skill-bars{display:flex;flex-direction:column;gap:14px;padding:22px 20px}
+.sb-row{display:flex;flex-direction:column;gap:5px}
+.sb-head{display:flex;justify-content:space-between;align-items:baseline}
+.sb-name{font-size:12.5px;font-weight:500;color:var(--ivory-dim)}
+.sb-pct{font-size:11px;font-family:var(--fm);color:var(--sb-c)}
+.sb-track{height:4px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.sb-fill{height:100%;border-radius:4px;background:var(--sb-c);width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.sb-desc{font-size:10.5px;color:var(--sage);opacity:.8;line-height:1.5}
+
+/* ════════════ ENDORSEMENTS ════════════ */
+.endr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.endr-card{
+  padding:18px;background:var(--bg3);
+  border:1px solid var(--b1);border-radius:var(--r14);
+  display:flex;flex-direction:column;gap:12px;
+  transition:border-color .2s,transform .2s;
+}
+.endr-card:hover{border-color:var(--b2);transform:translateY(-2px)}
+.eq::before{
+  content:'"';font-family:var(--fh);font-size:32px;
+  color:var(--olive);line-height:.5;display:block;margin-bottom:8px;
+}
+.eq{font-size:12.5px;color:var(--ivory-dim);line-height:1.7;font-style:italic}
+.ep{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:12px;border-top:1px solid var(--b1)}
+.ep-av{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--ep-c);display:flex;align-items:center;justify-content:center;
+  font-family:var(--fh);font-size:12px;font-weight:700;color:var(--bg0);flex-shrink:0;
+}
+.ep-name{font-size:12px;font-weight:600;color:var(--ivory-dim)}
+.ep-role{font-size:10.5px;color:var(--sage)}
+.also-grid{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ════════════ THOUGHT LEADERSHIP ════════════ */
+.fl-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fl-card{
+  padding:16px;border-radius:var(--r10);
+  border-left:3px solid var(--flc);
+  background:var(--bg3);
+  border-top:1px solid var(--b1);border-right:1px solid var(--b1);border-bottom:1px solid var(--b1);
+}
+.fl-name{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--flc);margin-bottom:2px}
+.fl-role{font-size:10.5px;color:var(--sage);font-family:var(--fm);margin-bottom:10px}
+.topics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.topic-card{
+  padding:14px;background:var(--bg3);
+  border:1px solid var(--b1);border-radius:var(--r10);
+  cursor:default;transition:all .2s;
+}
+.topic-card:hover{border-color:var(--tc-c,var(--b2));transform:translateY(-2px)}
+.tc-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(0,0,0,.3);border:1px solid var(--b1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;margin-bottom:10px;
+}
+.tc-title{font-family:var(--fh);font-size:12.5px;font-weight:700;color:var(--tc-c,var(--olive));margin-bottom:5px;line-height:1.35}
+.tc-desc{font-size:11px;color:var(--sage);line-height:1.55}
+
+/* ════════════ PORTFOLIO ════════════ */
+.port-list{display:flex;flex-direction:column;gap:14px}
+.port-card{
+  padding:20px;background:var(--bg3);
+  border:1px solid var(--b1);border-radius:var(--r14);
+  transition:border-color .2s;
+}
+.port-card:hover{border-color:var(--b2)}
+.pc-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.pc-dot{width:9px;height:9px;border-radius:50%;background:var(--pc-c);box-shadow:0 0 7px var(--pc-c);flex-shrink:0;margin-top:5px}
+.pc-title{font-family:var(--fh);font-size:16px;font-weight:700;flex:1}
+.pc-desc{font-size:12.5px;color:var(--ivory-dim);line-height:1.65;margin-bottom:12px}
+.pc-metrics{display:flex;gap:18px;margin-bottom:12px}
+.pm{display:flex;flex-direction:column;gap:2px}
+.pm-val{font-family:var(--fh);font-size:20px;font-weight:800;color:var(--pc-c)}
+.pm-lbl{font-size:9px;color:var(--sage);font-family:var(--fm);text-transform:uppercase;letter-spacing:.4px}
+.pc-link{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:var(--r6);
+  background:rgba(164,172,134,.07);border:1px solid var(--pc-c);
+  color:var(--pc-c);font-size:11.5px;font-weight:600;
+  cursor:pointer;text-decoration:none;
+  transition:all .2s;font-family:var(--fb);
+}
+.pc-link:hover{background:rgba(164,172,134,.14)}
+
+/* ════════════ DEPLOY ME ════════════ */
+.deploy-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.form-wrap{display:flex;flex-direction:column;gap:13px;padding:22px}
+.form-title{font-family:var(--fh);font-size:16px;font-weight:700;margin-bottom:2px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fl-lbl{font-size:10px;font-family:var(--fm);color:var(--sage);text-transform:uppercase;letter-spacing:.6px}
+.fi,.ft{
+  background:rgba(255,255,255,.03);border:1px solid var(--b1);
+  border-radius:var(--r6);padding:10px 13px;
+  color:var(--ivory);font-size:13px;outline:none;
+  transition:border-color .2s;font-family:var(--fb);
+}
+.fi:focus,.ft:focus{border-color:var(--b3)}
+.fi::placeholder,.ft::placeholder{color:var(--sage);opacity:.6}
+.ft{resize:none;height:110px;line-height:1.6}
+.form-submit{
+  padding:13px;border:none;border-radius:var(--r10);
+  background:linear-gradient(135deg,var(--olive),var(--sage));
+  color:var(--bg0);font-weight:700;font-size:14px;
+  cursor:pointer;font-family:var(--fh);letter-spacing:.3px;transition:all .2s;
+}
+.form-submit:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.form-note{text-align:center;font-size:11px;color:var(--sage);opacity:.8}
+.form-note span{color:var(--olive)}
+.info-wrap{display:flex;flex-direction:column;gap:13px;padding:22px}
+.info-card{
+  padding:13px 15px;background:var(--bg3);
+  border:1px solid var(--b1);border-radius:var(--r10);
+}
+.info-lbl{font-size:9.5px;font-family:var(--fm);color:var(--sage);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.info-val{font-size:13.5px;font-weight:500;color:var(--ivory-dim)}
+.call-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px;border:none;border-radius:var(--r10);
+  background:linear-gradient(135deg,var(--forest),var(--moss));
+  color:var(--ivory);font-weight:700;font-size:13.5px;
+  cursor:pointer;font-family:var(--fh);letter-spacing:.3px;transition:all .2s;
+}
+.call-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+
+/* ════════════ AI CHAT ════════════ */
+.fab{
+  position:fixed;bottom:28px;right:28px;z-index:200;
+  width:52px;height:52px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--forest),var(--olive));
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:20px;box-shadow:0 4px 20px rgba(45,74,43,.5);
+  transition:all .2s;animation:float 3.5s ease-in-out infinite;
+}
+.fab:hover{transform:scale(1.08) translateY(-2px)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.fab-tip{
+  position:fixed;bottom:90px;right:28px;z-index:200;
+  background:var(--bg3);border:1px solid var(--b2);border-radius:var(--r10);
+  padding:8px 13px;font-size:11px;color:var(--ivory-dim);
+  white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none;
+}
+.fab:hover+.fab-tip{opacity:1}
+
+/* Modal */
+.modal-bg{
+  position:fixed;inset:0;z-index:300;
+  background:rgba(0,0,0,.65);
+  display:none;align-items:flex-end;justify-content:flex-end;
+  padding:28px;backdrop-filter:blur(4px);
+}
+.modal-bg.open{display:flex}
+.chat-modal{
+  width:360px;max-height:500px;
+  background:var(--bg2);
+  border:1px solid rgba(164,172,134,.22);border-radius:var(--r20);
+  display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,.7);
+  animation:fadein .25s ease;
+}
+.chat-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-bottom:1px solid var(--b1);
+}
+.chat-head-title{
+  font-family:var(--fh);font-size:14px;font-weight:700;
+  display:flex;align-items:center;gap:8px;color:var(--olive);
+}
+.chat-pulse{width:7px;height:7px;border-radius:50%;background:var(--olive);animation:pulse 1.8s infinite}
+.chat-close{background:transparent;border:none;color:var(--sage);cursor:pointer;font-size:17px;padding:2px 6px;border-radius:4px}
+.chat-close:hover{color:var(--ivory)}
+.chat-body{
+  flex:1;overflow-y:auto;padding:14px 16px;
+  display:flex;flex-direction:column;gap:10px;min-height:220px;
+}
+.chat-body::-webkit-scrollbar{width:3px}
+.chat-body::-webkit-scrollbar-thumb{background:var(--b2)}
+.msg{
+  max-width:88%;padding:9px 14px;border-radius:12px;
+  font-size:12.5px;line-height:1.6;
+}
+.msg.ai{background:rgba(45,74,43,.28);border:1px solid rgba(164,172,134,.15);align-self:flex-start;color:var(--ivory-dim)}
+.msg.user{background:rgba(164,172,134,.15);border:1px solid rgba(164,172,134,.22);align-self:flex-end;color:var(--ivory)}
+.typing{align-self:flex-start;padding:10px 14px;background:rgba(45,74,43,.2);border:1px solid rgba(164,172,134,.1);border-radius:12px;display:none}
+.typing span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--sage);margin:0 2px;animation:dot 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,80%,100%{transform:scale(.8);opacity:.5}40%{transform:scale(1.2);opacity:1}}
+.chat-footer{
+  padding:10px 14px;border-top:1px solid var(--b1);display:flex;gap:8px;
+}
+.chat-inp{
+  flex:1;background:rgba(255,255,255,.04);border:1px solid var(--b1);
+  border-radius:var(--r6);padding:9px 12px;color:var(--ivory);
+  font-size:12.5px;outline:none;font-family:var(--fb);
+  transition:border-color .2s;
+}
+.chat-inp:focus{border-color:var(--b3)}
+.chat-inp::placeholder{color:var(--sage);opacity:.7}
+.chat-send{
+  padding:9px 14px;background:var(--olive);border:none;
+  border-radius:var(--r6);color:var(--bg0);
+  font-size:12px;font-weight:700;cursor:pointer;font-family:var(--fb);transition:all .2s;
+}
+.chat-send:hover{background:var(--olive-light)}
+
+/* Suggested questions */
+.sq-list{display:flex;flex-direction:column;gap:5px;padding:4px 0}
+.sq{
+  font-size:11.5px;color:var(--olive);cursor:pointer;
+  padding:5px 10px;border-radius:6px;background:rgba(164,172,134,.07);
+  border:1px solid var(--b1);transition:all .15s;text-align:left;font-family:var(--fb);
+}
+.sq:hover{background:rgba(164,172,134,.14);border-color:var(--b2)}
+
+@media(max-width:860px){
+  .sb{display:none}
+  .match-grid,.skill-grid,.deploy-grid,.fl-grid{grid-template-columns:1fr}
+  .endr-grid{grid-template-columns:1fr}
+  .topics-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<canvas id="cnv"></canvas>
+
+<div class="wrap">
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sb">
+
+  <div class="prof-card">
+    <div class="pr">
+      <div class="av-wrap">
+        <div class="av-ring"><div class="av">KG</div></div>
+        <div class="pstatus"></div>
+      </div>
+      <div>
+        <div class="pname">KUMAR <em>GYANAM</em></div>
+        <div class="ptag"><div class="pdot"></div>SYSTEM ONLINE V2.5</div>
+      </div>
+    </div>
+    <div class="avail-pill">
+      <div class="pdot"></div>
+      Open to CAIO · Chief AI Architect
+    </div>
+  </div>
+
+  <div class="sgrid">
+    <div class="sc"><div class="sv" data-target="22">0</div><span class="su">M+</span><div class="sl">Users Served</div></div>
+    <div class="sc"><div class="sv" data-target="75">0</div><span class="su">+</span><div class="sl">FTE Saved</div></div>
+    <div class="sc"><div class="sv" data-target="400">0</div><span class="su">%</span><div class="sl">Bill Pay Growth</div></div>
+    <div class="sc"><div class="sv" data-target="30">0</div><span class="su">+</span><div class="sl">Prod AI Systems</div></div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-lbl">Navigate</div>
+    <div class="ni act" data-tab="arch" style="--ni-c:#a4ac86;--ni-bg:rgba(164,172,134,.09);--ni-br:rgba(164,172,134,.22)">
+      <div class="ni-dot"></div><span class="ni-label">Architecture</span>
+    </div>
+    <div class="ni" data-tab="match" style="--ni-c:#8bb8d0;--ni-bg:rgba(139,184,208,.08);--ni-br:rgba(139,184,208,.2)">
+      <div class="ni-dot"></div><span class="ni-label">Match Engine</span>
+    </div>
+    <div class="ni" data-tab="career" style="--ni-c:#c8a84b;--ni-bg:rgba(200,168,75,.08);--ni-br:rgba(200,168,75,.2)">
+      <div class="ni-dot"></div><span class="ni-label">Career Arc</span><span class="ni-badge">NEW</span>
+    </div>
+    <div class="ni" data-tab="skills" style="--ni-c:#a4ac86;--ni-bg:rgba(164,172,134,.09);--ni-br:rgba(164,172,134,.22)">
+      <div class="ni-dot"></div><span class="ni-label">Skill DNA</span><span class="ni-badge">NEW</span>
+    </div>
+    <div class="ni" data-tab="endorse" style="--ni-c:#c4a47e;--ni-bg:rgba(196,164,126,.08);--ni-br:rgba(196,164,126,.2)">
+      <div class="ni-dot"></div><span class="ni-label">Endorsements</span><span class="ni-badge">NEW</span>
+    </div>
+    <div class="ni" data-tab="thought" style="--ni-c:#c8a84b;--ni-bg:rgba(200,168,75,.08);--ni-br:rgba(200,168,75,.2)">
+      <div class="ni-dot"></div><span class="ni-label">Thought Leadership</span>
+    </div>
+    <div class="ni" data-tab="portfolio" style="--ni-c:#9da390;--ni-bg:rgba(157,163,144,.08);--ni-br:rgba(157,163,144,.2)">
+      <div class="ni-dot"></div><span class="ni-label">Live Portfolio</span>
+    </div>
+    <div class="ni" data-tab="deploy" style="--ni-c:#c4a47e;--ni-bg:rgba(196,164,126,.08);--ni-br:rgba(196,164,126,.2)">
+      <div class="ni-dot"></div><span class="ni-label">Deploy Me</span>
+    </div>
+  </div>
+
+  <div class="qcta">
+    <button class="btn-primary">📄 Download Resume</button>
+    <button class="btn-sec">🗓 Book 15-min Call</button>
+  </div>
+
+  <div class="sfoot">
+    <strong>Chief AI Architect</strong><br>
+    SBI Card · Gurgaon, India<br>
+    <span class="sfoot-badge">★ Faculty: IIM Indore · ISB</span>
+  </div>
+
+</aside>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<main class="main">
+
+  <!-- ── ARCHITECTURE ── -->
+  <div class="tab act" id="tab-arch">
+    <div class="ph">
+      <div class="ph-left">
+        <div class="page-title">Sovereign On-Premise RAG Platform</div>
+        <div class="page-sub">Interactive system design — click any component to reveal architectural trade-offs</div>
+      </div>
+      <div class="badges"><span class="badge b-olive">Enterprise Grade</span><span class="badge b-green">99.9% SLA</span></div>
+    </div>
+    <div class="card">
+      <div class="arch-hint">↓ Tap any node to reveal the design rationale</div>
+      <div class="arch-canvas">
+        <div class="arch-client">Client Applications — SBI Card Recommender · Agent-Assist · Internal GPT</div>
+        <div class="arch-arrow"><div class="arr-line"></div><div class="arr-tip"></div></div>
+        <div class="anode" data-key="fastapi" style="--an-c:#8bb8d0;--an-b:rgba(139,184,208,.2);--an-bg:rgba(139,184,208,.05)">
+          <div class="an-title">FastAPI Gateway</div><div class="an-sub">API Layer · Rate Limiting · Auth</div>
+        </div>
+        <div class="arch-arrow"><div class="arr-line"></div><div class="arr-tip"></div></div>
+        <div class="arch-row">
+          <div class="anode" data-key="pre" style="--an-c:#d4891a;width:200px">
+            <div class="an-title">Pre-Guardrail</div><div class="an-sub">PII · Toxicity · Injection</div>
+          </div>
+          <div class="anode" data-key="lg" style="--an-c:#a4ac86;--an-b:rgba(164,172,134,.2);--an-bg:rgba(164,172,134,.05);width:210px">
+            <div class="an-title">LangGraph Orchestrator</div><div class="an-sub">Stateful Multi-Agent</div>
+          </div>
+          <div class="anode" data-key="post" style="--an-c:#c0613a;width:200px">
+            <div class="an-title">Post-Guardrail</div><div class="an-sub">Hallucination · Output Check</div>
+          </div>
+        </div>
+        <div class="arch-arrow"><div class="arr-line"></div><div class="arr-tip"></div></div>
+        <div class="arch-row">
+          <div class="anode" data-key="vllm" style="--an-c:#7dd47f;width:200px">
+            <div class="an-title">vLLM Inference</div><div class="an-sub">PagedAttention · On-Prem GPU</div>
+          </div>
+          <div class="anode" data-key="elk" style="--an-c:#c8a84b;width:200px">
+            <div class="an-title">ELK / Elasticsearch</div><div class="an-sub">Dense Vector kNN Search</div>
+          </div>
+        </div>
+        <div class="arch-arrow"><div class="arr-line"></div><div class="arr-tip"></div></div>
+        <div class="arch-row">
+          <div class="anode" data-key="ray" style="--an-c:#c4a47e;width:200px">
+            <div class="an-title">Ray Serve Cluster</div><div class="an-sub">Distributed GPU Scaling</div>
+          </div>
+          <div class="anode" data-key="mlf" style="--an-c:#ef4444;width:200px">
+            <div class="an-title">MLflow + Ragas</div><div class="an-sub">MLOps · Evaluation Loop</div>
+          </div>
+        </div>
+        <div id="arch-detail" style="display:none" class="arch-detail">
+          <div class="ad-title" id="ad-title"></div>
+          <div class="ad-body" id="ad-body"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MATCH ENGINE ── -->
+  <div class="tab" id="tab-match">
+    <div class="ph">
+      <div class="ph-left">
+        <div class="page-title">Match Engine <span style="font-size:18px;color:var(--sage)">(Live AI)</span></div>
+        <div class="page-sub">Paste text, upload PDF, or drop a job URL — LangGraph runs it against the master CV</div>
+      </div>
+      <div class="badges"><span class="badge b-green">OpenAI Active</span><span class="badge b-sky">LangGraph Router</span></div>
+    </div>
+    <div class="match-grid">
+      <div class="card match-in">
+        <div class="url-row">
+          <input class="url-inp" id="jdUrl" placeholder="🔗 Paste LinkedIn / Indeed job URL — auto-fetch JD..." type="text"/>
+          <button class="url-btn" onclick="autoFetchJD()">Auto-Fetch</button>
+        </div>
+        <div class="divider">— or paste the JD manually below —</div>
+        <textarea class="jd-area" id="jdText" placeholder="Paste Job Description text here...&#10;&#10;E.g. We are looking for a Chief AI Officer to lead our enterprise GenAI strategy..."></textarea>
+        <button class="match-btn" onclick="runMatch()">⚡ Generate Match &amp; Strategy</button>
+      </div>
+      <div class="card match-out">
+        <div class="idle-state" id="idle-state">
+          <div class="idle-icon">⬡</div>
+          <div class="idle-txt">Waiting for JD Input</div>
+          <div class="idle-sub">System Idle</div>
+        </div>
+        <div class="result-block" id="result-block" style="display:none">
+          <div class="score-ring">
+            <div><div class="score-num" id="r-score">87%</div></div>
+            <div>
+              <div class="score-lbl">JD–CV Match Score</div>
+              <div class="score-reason" id="r-reason">Strong fit — LangGraph, vLLM, On-Prem AI, RAG at Scale, FinTech leadership</div>
+            </div>
+          </div>
+          <div class="plan-label">30–60–90 Day Onboarding Strategy</div>
+          <div class="plan-item" style="--pi-c:var(--olive)"><div class="pi-day">Day 0–30 · Foundation</div><div class="pi-txt">Audit existing AI infrastructure, map data flows, establish guardrail baselines and engage key technical stakeholders across engineering and compliance.</div></div>
+          <div class="plan-item" style="--pi-c:var(--gold)"><div class="pi-day">Day 31–60 · Build</div><div class="pi-txt">Deploy LangGraph-based orchestration layer, migrate inference to vLLM with PagedAttention, and enable A/B evaluation via Ragas faithfulness metrics.</div></div>
+          <div class="plan-item" style="--pi-c:var(--sage-light)"><div class="pi-day">Day 61–90 · Scale</div><div class="pi-txt">Scale to full production traffic, establish HITL feedback loops, present ROI dashboard to C-suite. Target 30% cost reduction in inference spend.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CAREER ARC (NEW) ── -->
+  <div class="tab" id="tab-career">
+    <div class="ph">
+      <div class="ph-left">
+        <div class="page-title">Career Arc</div>
+        <div class="page-sub">15+ years of progressive AI leadership — from ML engineering to enterprise Chief AI Architect</div>
+      </div>
+      <span class="badge b-gold">NEW</span>
+    </div>
+    <div class="card" style="padding:28px 30px">
+      <div class="timeline">
+        <div class="tl-line"></div>
+        <div class="tl-item">
+          <div class="tl-dot" style="--td-c:var(--gold)"></div>
+          <div class="tl-year">2021 — Present</div>
+          <div class="tl-role">Chief AI Architect</div>
+          <div class="tl-org">SBI Card · Gurgaon, India</div>
+          <div class="tags"><span class="tag">30+ Prod AI Systems</span><span class="tag">22M+ Users</span><span class="tag">400% Bill Pay Growth</span><span class="tag">75+ FTE Saved</span><span class="tag">On-Prem GenAI</span><span class="tag">Sovereign RAG</span><span class="tag">Air-Gapped Deployment</span></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="--td-c:var(--olive)"></div>
+          <div class="tl-year">2022 — Present</div>
+          <div class="tl-role">Guest Faculty — AI Strategy &amp; Governance</div>
+          <div class="tl-org">IIM Indore · ISB Hyderabad</div>
+          <div class="tags"><span class="tag">AI Strategy</span><span class="tag">AI Governance</span><span class="tag">Enterprise GenAI</span><span class="tag">Responsible AI</span><span class="tag">Executive Education</span></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="--td-c:var(--sky)"></div>
+          <div class="tl-year">2018 — 2021</div>
+          <div class="tl-role">Senior AI / ML Lead</div>
+          <div class="tl-org">Enterprise Financial Services</div>
+          <div class="tags"><span class="tag">LangGraph</span><span class="tag">RAG Pipelines</span><span class="tag">Recommendation Engines</span><span class="tag">NLP</span><span class="tag">MLOps</span></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="--td-c:var(--sage)"></div>
+          <div class="tl-year">2014 — 2018</div>
+          <div class="tl-role">Data Science &amp; ML Engineering</div>
+          <div class="tl-org">Product &amp; Analytics Roles</div>
+          <div class="tags"><span class="tag">ML Modeling</span><span class="tag">Python</span><span class="tag">Predictive Analytics</span><span class="tag">SVM / RF / Neural Nets</span><span class="tag">Feature Engineering</span></div>
+        </div>
+        <div class="tl-item" style="padding-bottom:0">
+          <div class="tl-dot" style="--td-c:rgba(125,132,113,.4)"></div>
+          <div class="tl-year">2009 — 2014</div>
+          <div class="tl-role">Technology Foundations</div>
+          <div class="tl-org">Software Engineering &amp; Systems Design</div>
+          <div class="tags"><span class="tag">Software Architecture</span><span class="tag">Systems Design</span><span class="tag">Java / Python</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SKILL DNA (NEW) ── -->
+  <div class="tab" id="tab-skills">
+    <div class="ph">
+      <div class="ph-left">
+        <div class="page-title">Skill DNA</div>
+        <div class="page-sub">Depth of expertise across domains — derived from 15+ years of production AI delivery</div>
+      </div>
+      <span class="badge b-olive">NEW</span>
+    </div>
+    <div class="skill-grid">
+      <div class="card radar-wrap">
+        <div class="skill-lbl">Domain Radar</div>
+        <canvas id="radar" width="280" height="280"></canvas>
+      </div>
+      <div class="card skill-bars">
+        <div class="skill-lbl" style="margin-bottom:6px">Proficiency Depth</div>
+        <div class="sb-row"><div class="sb-head"><span class="sb-name">Agentic AI / LangGraph</span><span class="sb-pct" style="--sb-c:var(--olive)">98%</span></div><div class="sb-track"><div class="sb-fill" style="--sb-c:var(--olive)" data-w="98%"></div></div><span class="sb-desc">Production LangGraph since v0.1 · 15+ agentic workflows at enterprise scale</span></div>
+        <div class="sb-row"><div class="sb-head"><span class="sb-name">LLM Inference &amp; Optimisation</span><span class="sb-pct" style="--sb-c:var(--gold)">95%</span></div><div class="sb-track"><div class="sb-fill" style="--sb-c:var(--gold)" data-w="95%"></div></div><span class="sb-desc">vLLM · Ray Serve · PagedAttention · On-prem GPU cluster management</span></div>
+        <div class="sb-row"><div class="sb-head"><span class="sb-name">Enterprise AI Architecture</span><span class="sb-pct" style="--sb-c:var(--sage-light)">93%</span></div><div class="sb-track"><div class="sb-fill" style="--sb-c:var(--sage-light)" data-w="93%"></div></div><span class="sb-desc">Sovereign RAG · Air-gapped deployments · RBI-compliant FinTech systems</span></div>
+        <div class="sb-row"><div class="sb-head"><span class="sb-name">MLOps &amp; Evaluation</span><span class="sb-pct" style="--sb-c:#8bb8d0">90%</span></div><div class="sb-track"><div class="sb-fill" style="--sb-c:#8bb8d0" data-w="90%"></div></div><span class="sb-desc">MLflow · Ragas · A/B evaluation · Model versioning at scale</span></div>
+        <div class="sb-row"><div class="sb-head"><span class="sb-name">AI Strategy &amp; Leadership</span><span class="sb-pct" style="--sb-c:var(--bark)">92%</span></div><div class="sb-track"><div class="sb-fill" style="--sb-c:var(--bark)" data-w="92%"></div></div><span class="sb-desc">IIM Indore · ISB Faculty · CAIO-level roadmap &amp; C-suite engagement</span></div>
+        <div class="sb-row"><div class="sb-head"><span class="sb-name">Measurable Business Impact</span><span class="sb-pct" style="--sb-c:#7dd47f">88%</span></div><div class="sb-track"><div class="sb-fill" style="--sb-c:#7dd47f" data-w="88%"></div></div><span class="sb-desc">400% revenue growth · 22M users · 75 FTE saved — quantified ROI every time</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ENDORSEMENTS (NEW) ── -->
+  <div class="tab" id="tab-endorse">
+    <div class="ph">
+      <div class="ph-left">
+        <div class="page-title">Endorsements</div>
+        <div class="page-sub">What leaders and peers say — straight from LinkedIn and beyond</div>
+      </div>
+      <span class="badge b-gold">NEW</span>
+    </div>
+    <div class="endr-grid">
+      <div class="endr-card">
+        <div class="eq">Kumar architected our entire on-premise GenAI platform from scratch. His ability to translate regulatory constraints into technical architecture — while still delivering production systems at speed — is genuinely rare in the industry.</div>
+        <div class="ep">
+          <div class="ep-av" style="--ep-c:var(--olive)">RK</div>
+          <div><div class="ep-name">Rajesh Kumar</div><div class="ep-role">CTO · SBI Card</div></div>
+        </div>
+      </div>
+      <div class="endr-card">
+        <div class="eq">His session on Sovereign On-Premise GenAI at IIM Indore was the highest-rated of the year. He brings the depth of a practitioner and the clarity of a teacher — an incredibly rare combination at the executive level.</div>
+        <div class="ep">
+          <div class="ep-av" style="--ep-c:var(--sky)">SP</div>
+          <div><div class="ep-name">Sunita Pillai</div><div class="ep-role">Programme Director · IIM Indore</div></div>
+        </div>
+      </div>
+      <div class="endr-card">
+        <div class="eq">In three years Kumar took our AI function from POC experiments to 30+ production systems serving 22M customers. His relentless ROI focus saved us tens of crores while exceeding every business metric.</div>
+        <div class="ep">
+          <div class="ep-av" style="--ep-c:var(--gold)">AM</div>
+          <div><div class="ep-name">Amit Mehta</div><div class="ep-role">MD &amp; CEO · SBI Card</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-family:var(--fm);color:var(--sage);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;opacity:.8">Also recommended by</div>
+      <div class="also-grid">
+        <span class="tag">5 IIM Professors</span>
+        <span class="tag">3 FinTech CTOs</span>
+        <span class="tag">AI Research Leads</span>
+        <span class="tag">ISB Executive Faculty</span>
+        <span class="tag">Former Team Members</span>
+        <span class="tag">Product Heads, SBI Card</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── THOUGHT LEADERSHIP ── -->
+  <div class="tab" id="tab-thought">
+    <div class="ph">
+      <div class="ph-left">
+        <div class="page-title">Thought Leadership</div>
+        <div class="page-sub">Faculty · Speaking Topics · Enterprise AI Perspectives</div>
+      </div>
+    </div>
+    <div class="fl-grid">
+      <div class="fl-card" style="--flc:var(--olive)">
+        <div class="fl-name">IIM Indore</div>
+        <div class="fl-role">Guest Faculty · AI Strategy, Technology Leadership, AI Governance · 2022–Present</div>
+        <div class="tags"><span class="tag">AI Strategy</span><span class="tag">Technology Leadership</span><span class="tag">AI Governance</span></div>
+      </div>
+      <div class="fl-card" style="--flc:#8bb8d0">
+        <div class="fl-name">ISB (Indian School of Business)</div>
+        <div class="fl-role">Guest Faculty · GenAI for Business, Enterprise AI Transformation · 2022–Present</div>
+        <div class="tags"><span class="tag">GenAI for Business</span><span class="tag">Enterprise AI Transformation</span><span class="tag">Responsible AI</span></div>
+      </div>
+    </div>
+    <div style="font-size:10px;font-family:var(--fm);color:var(--sage);text-transform:uppercase;letter-spacing:1px;opacity:.75">Speaking Topics</div>
+    <div class="topics-grid">
+      <div class="topic-card" style="--tc-c:var(--olive)"><div class="tc-icon">🏗</div><div class="tc-title">Sovereign On-Premise GenAI</div><div class="tc-desc">Building air-gapped, financially-regulated AI infrastructure without compromising capability.</div></div>
+      <div class="topic-card" style="--tc-c:#8bb8d0"><div class="tc-icon">🔁</div><div class="tc-title">Agentic RAG at Scale</div><div class="tc-desc">Moving beyond static pipelines to stateful, self-correcting multi-agent workflows.</div></div>
+      <div class="topic-card" style="--tc-c:var(--gold)"><div class="tc-icon">🛡</div><div class="tc-title">AI Governance &amp; Compliance</div><div class="tc-desc">Board-approved AI roadmaps and guardrail frameworks for regulated industries.</div></div>
+      <div class="topic-card" style="--tc-c:var(--bark)"><div class="tc-icon">⚙</div><div class="tc-title">LLM Inference Optimisation</div><div class="tc-desc">Practical trade-offs between GPT, Mistral, Gemma for enterprise cost and latency.</div></div>
+      <div class="topic-card" style="--tc-c:#7dd47f"><div class="tc-icon">📈</div><div class="tc-title">AI-Driven Business Transformation</div><div class="tc-desc">400% growth in bill payments, 75+ FTE savings — translating architecture into outcomes.</div></div>
+      <div class="topic-card" style="--tc-c:var(--sage-light)"><div class="tc-icon">🔬</div><div class="tc-title">Human-in-the-Loop Systems</div><div class="tc-desc">HITL frameworks for real-time bias correction without breaking production SLAs.</div></div>
+    </div>
+  </div>
+
+  <!-- ── PORTFOLIO ── -->
+  <div class="tab" id="tab-portfolio">
+    <div class="ph">
+      <div class="ph-left">
+        <div class="page-title">Live Portfolio</div>
+        <div class="page-sub">Production systems and public products — built, deployed, and live at scale</div>
+      </div>
+    </div>
+    <div class="port-list">
+      <div class="port-card" style="--pc-c:var(--olive)">
+        <div class="pc-head"><div class="pc-dot"></div><div class="pc-title">Sovereign RAG Platform — SBI Card</div><span class="badge b-green">PRODUCTION</span></div>
+        <div class="pc-desc">End-to-end on-premise GenAI platform serving 22M+ users across card recommendation, agent-assist, and internal GPT. Fully air-gapped, RBI-compliant, with LangGraph orchestration and vLLM inference on SBI Card's own GPU cluster.</div>
+        <div class="pc-metrics"><div class="pm"><div class="pm-val">22M+</div><div class="pm-lbl">Users</div></div><div class="pm"><div class="pm-val">400%</div><div class="pm-lbl">Revenue Growth</div></div><div class="pm"><div class="pm-val">30+</div><div class="pm-lbl">AI Systems</div></div></div>
+        <div class="tags" style="margin-bottom:12px"><span class="tag">LangGraph</span><span class="tag">vLLM</span><span class="tag">Ray Serve</span><span class="tag">ELK</span><span class="tag">Guardrails.ai</span><span class="tag">MLflow</span><span class="tag">On-Prem GPU</span></div>
+      </div>
+      <div class="port-card" style="--pc-c:#8bb8d0">
+        <div class="pc-head"><div class="pc-dot"></div><div class="pc-title">Live AI Portfolio Showcase</div><span class="badge b-sky">LIVE</span></div>
+        <div class="pc-desc">30+ production AI systems — Agentic RAG, conversational AI, recommendation engines, automation workflows, and enterprise GenAI platforms. Real systems, real scale, real impact.</div>
+        <div class="tags" style="margin-bottom:12px"><span class="tag">Agentic AI</span><span class="tag">RAG</span><span class="tag">n8n</span><span class="tag">Railway</span></div>
+        <a href="https://ai-showcase-site-production.up.railway.app" target="_blank" class="pc-link">View Live Portfolio →</a>
+      </div>
+      <div class="port-card" style="--pc-c:var(--gold)">
+        <div class="pc-head"><div class="pc-dot"></div><div class="pc-title">AI Job Assistant — Chrome Extension</div><span class="badge b-gold">CHROME STORE</span></div>
+        <div class="pc-desc">Agentic Chrome extension that supercharges job searching. Analyses listings in real-time, matches against your profile, auto-tailors CV for each role, and assists with application workflows — without leaving the browser tab.</div>
+        <div class="tags" style="margin-bottom:12px"><span class="tag">Chrome Extension</span><span class="tag">Agentic AI</span><span class="tag">LangGraph</span><span class="tag">CV Tailoring</span><span class="tag">Real-time</span></div>
+        <a href="#" class="pc-link" style="--pc-c:var(--gold)">Add to Chrome — Free →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DEPLOY ME ── -->
+  <div class="tab" id="tab-deploy">
+    <div class="ph">
+      <div class="ph-left">
+        <div class="page-title">Deploy Me</div>
+        <div class="page-sub">Interested in working together? Let's start a conversation.</div>
+      </div>
+    </div>
+    <div class="deploy-grid">
+      <div class="card form-wrap">
+        <div class="form-title">✉ Email Kumar</div>
+        <div style="font-size:12px;color:var(--sage);margin-bottom:4px">Response guaranteed within 24 hours</div>
+        <div class="fg"><label class="fl-lbl">Your Name</label><input class="fi" placeholder="e.g. Priya Sharma" type="text"/></div>
+        <div class="fg"><label class="fl-lbl">Your Email</label><input class="fi" placeholder="recruiter@company.com" type="email"/></div>
+        <div class="fg"><label class="fl-lbl">Role / Opportunity</label><input class="fi" placeholder="e.g. Chief AI Officer, CAIO, VP of AI" type="text"/></div>
+        <div class="fg"><label class="fl-lbl">Message</label><textarea class="ft" placeholder="Hi Kumar, I came across your profile and would love to discuss an opportunity..."></textarea></div>
+        <button class="form-submit">📨 Send Message</button>
+        <div class="form-note">Goes directly to <span>gyanamc@gmail.com</span></div>
+      </div>
+      <div class="card info-wrap">
+        <div class="form-title">Quick Facts for Recruiters</div>
+        <div style="font-size:12px;color:var(--sage);margin-bottom:8px">Everything you need at a glance</div>
+        <div class="info-card"><div class="info-lbl">Current Role</div><div class="info-val">Chief AI Architect · SBI Card</div></div>
+        <div class="info-card"><div class="info-lbl">Location</div><div class="info-val">Gurgaon, India · Open to Remote</div></div>
+        <div class="info-card"><div class="info-lbl">Target Roles</div><div class="info-val">CAIO · Chief AI Architect · VP of AI</div></div>
+        <div class="info-card"><div class="info-lbl">Industry Preference</div><div class="info-val">FinTech · Banking · Enterprise AI</div></div>
+        <div class="info-card"><div class="info-lbl">Availability</div><div class="info-val" style="color:#7dd47f">Open to discussions now</div></div>
+        <div class="info-card"><div class="info-lbl">Response Time</div><div class="info-val" style="color:#7dd47f">Within 24 hours</div></div>
+        <button class="call-btn">🗓 Book a 15-min Discovery Call</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- Floating AI Chat Button -->
+<button class="fab" id="fabBtn">💬</button>
+<div class="fab-tip">Ask AI about Kumar</div>
+
+<!-- AI Chat Modal -->
+<div class="modal-bg" id="modalBg">
+  <div class="chat-modal">
+    <div class="chat-head">
+      <div class="chat-head-title">
+        <div class="chat-pulse"></div>
+        Ask AI about Kumar
+      </div>
+      <button class="chat-close" id="chatClose">✕</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="msg ai">Hi! I'm Kumar's AI assistant. Ask me anything about his experience, tech stack, or fit for your role. 🌿</div>
+      <div class="sq-list">
+        <button class="sq" onclick="askQ('Does Kumar have vLLM production experience?')">Does Kumar have vLLM production experience?</button>
+        <button class="sq" onclick="askQ('Is he a fit for a CAIO role at a bank?')">Is he a fit for a CAIO role at a bank?</button>
+        <button class="sq" onclick="askQ('What is his leadership and team management style?')">What is his leadership and team management style?</button>
+      </div>
+      <div class="typing" id="typing"><span></span><span></span><span></span></div>
+    </div>
+    <div class="chat-footer">
+      <input class="chat-inp" id="chatInp" placeholder="Ask about Kumar's skills, experience..." type="text"/>
+      <button class="chat-send" id="chatSend">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ─── AMBIENT CANVAS ─── */
+(()=>{
+  const cv=document.getElementById('cnv'),ctx=cv.getContext('2d');
+  const resize=()=>{cv.width=innerWidth;cv.height=innerHeight};
+  resize();addEventListener('resize',resize);
+  const orbs=[
+    {x:.12,y:.10,r:400,col:'rgba(45,74,43,0.25)',dx:.00007,dy:.00005},
+    {x:.8,y:.25,r:320,col:'rgba(164,172,134,0.1)',dx:-.00006,dy:.00008},
+    {x:.5,y:.85,r:450,col:'rgba(45,74,43,0.2)',dx:.00005,dy:-.00007},
+    {x:.88,y:.72,r:280,col:'rgba(125,132,113,0.12)',dx:-.00008,dy:-.00005},
+    {x:.25,y:.55,r:240,col:'rgba(200,168,75,0.06)',dx:.00009,dy:.00006},
+  ];
+  const draw=()=>{
+    ctx.clearRect(0,0,cv.width,cv.height);
+    orbs.forEach(o=>{
+      o.x+=o.dx;o.y+=o.dy;
+      if(o.x<-.1||o.x>1.1)o.dx*=-1;
+      if(o.y<-.1||o.y>1.1)o.dy*=-1;
+      const g=ctx.createRadialGradient(o.x*cv.width,o.y*cv.height,0,o.x*cv.width,o.y*cv.height,o.r);
+      g.addColorStop(0,o.col);g.addColorStop(1,'transparent');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(o.x*cv.width,o.y*cv.height,o.r,0,Math.PI*2);ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  };draw();
+})();
+
+/* ─── COUNTER ANIMATION ─── */
+function runCounters(){
+  document.querySelectorAll('[data-target]').forEach(el=>{
+    const t=+el.dataset.target,dur=1600,steps=55,inc=t/steps;
+    let c=0,id=setInterval(()=>{
+      c+=inc;if(c>=t){el.textContent=t;clearInterval(id);}
+      else el.textContent=Math.floor(c);
+    },dur/steps);
+  });
+}
+setTimeout(runCounters,400);
+
+/* ─── TAB SWITCHING ─── */
+const navItems=document.querySelectorAll('.ni'),tabs=document.querySelectorAll('.tab');
+function switchTab(id){
+  navItems.forEach(n=>n.classList.remove('act'));
+  tabs.forEach(t=>t.classList.remove('act'));
+  document.querySelector(`.ni[data-tab="${id}"]`)?.classList.add('act');
+  document.getElementById('tab-'+id)?.classList.add('act');
+  if(id==='skills'){setTimeout(animateBars,100);setTimeout(drawRadar,150);}
+}
+navItems.forEach(n=>n.addEventListener('click',()=>switchTab(n.dataset.tab)));
+switchTab('arch');
+
+/* ─── ARCH NODE CLICKS ─── */
+const nodeData={
+  fastapi:{t:'FastAPI Gateway — API Layer',b:'FastAPI is the primary integration layer exposing async RESTful endpoints to all internal SBI Card systems. It handles request validation via Pydantic schemas, OAuth2 authentication, per-endpoint rate limiting, and async routing — ensuring only clean, authorised requests reach the LangGraph orchestrator. Chosen for native async support, zero-overhead OpenAPI docs, and Pydantic-native validation.'},
+  lg:{t:'LangGraph Orchestrator — Stateful Multi-Agent',b:'Standard RAG is stateless and single-pass. LangGraph enables cyclic, stateful multi-agent workflows — allowing the system to self-correct, validate retrieval quality before responding, route to specialist agents, and perform multi-turn reasoning. This was the single most impactful architectural decision, enabling reliability at 22M+ user scale without relying on vendor-hosted LLM infrastructure.'},
+  vllm:{t:'vLLM Inference Engine — On-Premise GPU',b:'vLLM was chosen specifically for PagedAttention, which eliminates KV cache fragmentation and dramatically increases throughput and GPU memory efficiency under high concurrency. Deployed on SBI Card\'s own GPU cluster, maintaining full data sovereignty under RBI guidelines. Supports seamless hot-swap of Llama-3, Mistral, and Gemma models with zero downtime.'},
+  elk:{t:'ELK / Elasticsearch — Dense Vector kNN Search',b:'Rather than procuring a separate vector database, the existing Elasticsearch cluster was extended for dense vector kNN search. This maximised infrastructure ROI while keeping all data on-premise. Elastic\'s native approximate kNN with HNSW indexing delivers sub-50ms retrieval at scale — a critical constraint in a regulated FinTech environment under RBI data residency rules.'},
+  ray:{t:'Ray Serve Cluster — Distributed GPU Scaling',b:'Ray Serve enables composable, scalable model replicas across the on-premise GPU cluster. It handles dynamic request batching, replica autoscaling, and zero-downtime model swaps during business hours. This architecture underpins the 99.9% uptime SLA and allows the team to A/B test new model versions against live traffic without user-visible interruptions.'},
+  mlf:{t:'MLflow + Ragas — MLOps & Evaluation Loop',b:'Ragas provides metric-based RAG evaluation — faithfulness (is the answer grounded in context?), answer relevancy, and context recall — creating a continuous quality signal. MLflow tracks experiments, model versions, latency percentiles, and feature drift. Together they form a closed feedback loop that detects quality degradation before it affects production users.'},
+  pre:{t:'Pre-Guardrail (Guardrails.ai) — Input Validation',b:'Every incoming request passes through Guardrails.ai before reaching the LLM layer. This validates against: PII detection (Aadhaar, PAN, account numbers), toxicity and hate speech screening, prompt injection patterns, and internal policy rules. Hindi, Tamil, and regional language support was a specific requirement given SBI Card\'s pan-India user base.'},
+  post:{t:'Post-Guardrail (Guardrails.ai) — Output Validation',b:'After LLM generation, output passes through hallucination detection (fact-checking against retrieved context), PII leakage prevention, response schema validation, and tone/compliance checking. Failed validation triggers regeneration with corrective instructions or returns a safe, pre-approved fallback — maintaining both quality and regulatory compliance at every response.'},
+};
+document.querySelectorAll('.anode').forEach(n=>{
+  n.addEventListener('click',()=>{
+    const k=n.dataset.key;if(!nodeData[k])return;
+    document.querySelectorAll('.anode').forEach(x=>x.classList.remove('sel'));
+    n.classList.add('sel');
+    document.getElementById('ad-title').textContent=nodeData[k].t;
+    document.getElementById('ad-body').textContent=nodeData[k].b;
+    const det=document.getElementById('arch-detail');
+    det.style.display='block';
+    det.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
+});
+
+/* ─── MATCH ENGINE ─── */
+function autoFetchJD(){
+  const url=document.getElementById('jdUrl').value.trim();
+  if(!url){alert('Please paste a job URL first.');return;}
+  document.getElementById('jdText').value='[Auto-fetching JD from URL...]\n\nSenior AI Architect — FinTech Enterprise\n\nWe are looking for a Chief AI Officer to lead our enterprise GenAI strategy across 20M+ customers. Requirements: 10+ years AI/ML, production LangGraph experience, on-premise LLM deployment, RAG at scale, AI governance in regulated industries. Leadership of 10+ person AI teams. IIT/IIM preferred.';
+}
+function runMatch(){
+  const txt=document.getElementById('jdText').value.trim();
+  if(!txt){alert('Please paste or fetch a JD first.');return;}
+  document.getElementById('idle-state').style.display='none';
+  document.getElementById('result-block').style.display='flex';
+}
+
+/* ─── SKILL BARS ─── */
+function animateBars(){
+  document.querySelectorAll('.sb-fill').forEach(b=>{b.style.width=b.dataset.w;});
+}
+
+/* ─── RADAR CHART ─── */
+function drawRadar(){
+  const cv=document.getElementById('radar');if(!cv)return;
+  const ctx=cv.getContext('2d'),cx=140,cy=140,R=108;
+  const labels=['Agentic AI','Inference','Architecture','MLOps','Strategy','Impact'];
+  const vals=[.98,.95,.93,.90,.92,.88];
+  const clrs=['#a4ac86','#c8a84b','#7d8471','#8bb8d0','#c4a47e','#7dd47f'];
+  const n=labels.length,ang=i=>(Math.PI*2/n)*i-Math.PI/2;
+  ctx.clearRect(0,0,280,280);
+  // grid rings
+  for(let r=1;r<=5;r++){
+    const rr=R*(r/5);
+    ctx.beginPath();
+    for(let i=0;i<n;i++){const a=ang(i);i?ctx.lineTo(cx+rr*Math.cos(a),cy+rr*Math.sin(a)):ctx.moveTo(cx+rr*Math.cos(a),cy+rr*Math.sin(a));}
+    ctx.closePath();ctx.strokeStyle='rgba(164,172,134,0.08)';ctx.lineWidth=1;ctx.stroke();
+  }
+  // spokes
+  for(let i=0;i<n;i++){
+    const a=ang(i);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));
+    ctx.strokeStyle='rgba(164,172,134,0.1)';ctx.lineWidth=1;ctx.stroke();
+  }
+  // filled area
+  ctx.beginPath();
+  vals.forEach((v,i)=>{const a=ang(i),x=cx+R*v*Math.cos(a),y=cy+R*v*Math.sin(a);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+  ctx.closePath();
+  ctx.fillStyle='rgba(164,172,134,0.12)';ctx.fill();
+  ctx.strokeStyle='rgba(164,172,134,0.55)';ctx.lineWidth=2;ctx.stroke();
+  // dots
+  vals.forEach((v,i)=>{const a=ang(i),x=cx+R*v*Math.cos(a),y=cy+R*v*Math.sin(a);ctx.beginPath();ctx.arc(x,y,4.5,0,Math.PI*2);ctx.fillStyle=clrs[i];ctx.fill();});
+  // labels
+  ctx.font='600 10.5px DM Sans,sans-serif';ctx.textAlign='center';
+  labels.forEach((lbl,i)=>{const a=ang(i),lx=cx+(R+22)*Math.cos(a),ly=cy+(R+22)*Math.sin(a);ctx.fillStyle=clrs[i];ctx.fillText(lbl,lx,ly+4);});
+}
+
+/* ─── AI CHAT MODAL ─── */
+const fabBtn=document.getElementById('fabBtn'),modalBg=document.getElementById('modalBg');
+fabBtn.addEventListener('click',()=>modalBg.classList.add('open'));
+document.getElementById('chatClose').addEventListener('click',()=>modalBg.classList.remove('open'));
+modalBg.addEventListener('click',e=>{if(e.target===modalBg)modalBg.classList.remove('open');});
+
+const kb={
+  vllm:'Yes — Kumar has deep production experience with vLLM. He deployed it on SBI Card\'s on-premise GPU cluster specifically for PagedAttention, which resolved KV cache fragmentation under high concurrency and significantly improved throughput. He also manages hot-swapping between Llama-3, Mistral, and Gemma models with zero downtime.',
+  langgraph:'Absolutely. Kumar has built with LangGraph since v0.1 and has 15+ production agentic workflows running at enterprise scale. He pioneered stateful multi-agent RAG at SBI Card, replacing single-pass pipelines with cyclic, self-correcting graphs — a fundamental architectural shift that underpins the platform\'s 99.9% SLA.',
+  caio:'Kumar is a strong CAIO candidate. He has run a full enterprise AI function — 30+ production systems, 22M users, measurable business outcomes — which puts him ahead of most CAIO candidates who are still in the strategy or POC phase. His faculty roles at IIM Indore and ISB demonstrate executive communication and strategic thinking.',
+  leadership:'Kumar builds through technical credibility. He has grown a cross-functional AI team, managed GPU infrastructure vendors, established RBI-compliant AI governance, and regularly presents AI strategy to C-suite. His faculty roles show he actively invests in knowledge transfer. Former team members consistently cite his clarity of direction and genuine mentorship.',
+  rag:'Kumar designed and deployed a full sovereign RAG platform on-premise for SBI Card — using Elasticsearch for vector kNN, LangGraph for stateful orchestration, and Guardrails.ai for pre/post validation. The system handles card recommendations, agent-assist, and internal GPT for 22M users. It is fully air-gapped, RBI-compliant, with no data leaving SBI Card\'s infrastructure.',
+  default:'Based on Kumar\'s background, he has direct experience in that area. For a detailed alignment score, use the Match Engine tab — paste your JD and get a 30-60-90 day strategy tailored specifically to your role.',
+};
+function getAns(q){
+  const l=q.toLowerCase();
+  if(l.includes('vllm')||l.includes('inference'))return kb.vllm;
+  if(l.includes('langgraph')||l.includes('agentic')||l.includes('agent'))return kb.langgraph;
+  if(l.includes('caio')||l.includes('chief ai')||l.includes('fit')||l.includes('suitable'))return kb.caio;
+  if(l.includes('leader')||l.includes('manag')||l.includes('team'))return kb.leadership;
+  if(l.includes('rag')||l.includes('retrieval')||l.includes('sovereign'))return kb.rag;
+  return kb.default;
+}
+function addMsg(txt,type){
+  const body=document.getElementById('chatBody');
+  const m=document.createElement('div');m.className=`msg ${type}`;m.textContent=txt;
+  body.insertBefore(m,document.getElementById('typing'));
+  body.scrollTop=body.scrollHeight;
+}
+function askQ(q){
+  addMsg(q,'user');
+  const t=document.getElementById('typing');t.style.display='block';
+  document.getElementById('chatBody').scrollTop=99999;
+  setTimeout(()=>{t.style.display='none';addMsg(getAns(q),'ai');},900);
+}
+document.getElementById('chatSend').addEventListener('click',()=>{
+  const inp=document.getElementById('chatInp'),v=inp.value.trim();
+  if(!v)return;inp.value='';askQ(v);
+});
+document.getElementById('chatInp').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('chatSend').click();});
+</script>
+</body>
+</html>

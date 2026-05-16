@@ -1,8 +1,10 @@
 import { useState, useRef, type ChangeEvent } from 'react';
 
 const ReverseInterviewEngine = () => {
-  const [jdText, setJdText] = useState('');
-  const [jdFile, setJdFile] = useState<File | null>(null);
+  const [jdText, setJdText]   = useState('');
+  const [jdFile, setJdFile]   = useState<File | null>(null);
+  const [jdUrl,  setJdUrl]    = useState('');
+  const [fetchingUrl, setFetchingUrl] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [logs, setLogs] = useState<string[]>([]);
@@ -20,6 +22,17 @@ const ReverseInterviewEngine = () => {
     setJdFile(null);
     setJdText('');
     if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleAutoFetch = async () => {
+    if (!jdUrl.trim()) return;
+    setFetchingUrl(true);
+    // Simulate fetching — in production wire to /api/fetch_jd?url=...
+    setTimeout(() => {
+      setJdText(`[Auto-fetched from: ${jdUrl}]\n\nSenior AI Architect / CAIO — Enterprise FinTech\n\nWe are looking for a Chief AI Officer to lead our enterprise GenAI strategy across 20M+ customers. Requirements: 10+ years AI/ML, production LangGraph experience, on-premise LLM deployment, sovereign RAG at scale, AI governance in regulated industries. Leadership of 10+ person AI teams. Premier IIT/IIM preferred.`);
+      setJdUrl('');
+      setFetchingUrl(false);
+    }, 1400);
   };
 
   const handleAnalyze = async () => {
@@ -75,7 +88,7 @@ const ReverseInterviewEngine = () => {
           </p>
         </div>
         <div className="rie-badges">
-          <span className="badge badge-green">OpenAI Active</span>
+          <span className="badge badge-moss">OpenAI Active</span>
           <span className="badge badge-blue">LangGraph Router</span>
         </div>
       </div>
@@ -84,31 +97,43 @@ const ReverseInterviewEngine = () => {
       <div className="rie-body">
         {/* Input panel */}
         <div className="rie-input-panel">
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+
+          {/* URL auto-fetch — NEW */}
+          <div className="rie-url-row">
             <input
-              type="file"
-              accept="application/pdf"
-              style={{ display: 'none' }}
-              ref={fileInputRef}
-              onChange={handleFileUpload}
+              type="text"
+              className="rie-url-input"
+              placeholder="🔗 Paste LinkedIn / Indeed job URL — auto-fetch JD..."
+              value={jdUrl}
+              onChange={e => setJdUrl(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleAutoFetch()}
             />
+            <button className="rie-url-btn" onClick={handleAutoFetch} disabled={fetchingUrl}>
+              {fetchingUrl ? 'Fetching…' : 'Auto-Fetch'}
+            </button>
+          </div>
+
+          <div className="rie-divider">— or upload / paste manually —</div>
+
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <input type="file" accept="application/pdf" style={{ display: 'none' }} ref={fileInputRef} onChange={handleFileUpload} />
             <button
               onClick={() => fileInputRef.current?.click()}
-              style={{ padding: '8px 16px', background: 'var(--panel-bg)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-primary)', cursor: 'pointer' }}>
+              style={{ padding: '8px 16px', background: 'rgba(164,172,134,0.08)', border: '1px solid var(--border-color)', borderRadius: 8, color: 'var(--text-primary)', cursor: 'pointer', fontSize: 13, fontFamily: 'DM Sans, sans-serif' }}>
               📄 Upload JD (PDF)
             </button>
             {jdFile && (
-              <button onClick={clearFile} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid red', color: 'red', borderRadius: '8px', cursor: 'pointer' }}>
-                Clear File
+              <button onClick={clearFile} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid rgba(192,97,58,0.5)', color: '#c0613a', borderRadius: 8, cursor: 'pointer', fontSize: 13, fontFamily: 'DM Sans, sans-serif' }}>
+                ✕ Clear File
               </button>
             )}
           </div>
 
           <textarea
             value={jdText}
-            onChange={(e) => setJdText(e.target.value)}
+            onChange={e => setJdText(e.target.value)}
             disabled={jdFile !== null}
-            placeholder={jdFile ? '' : 'Or paste the Job Description text here...'}
+            placeholder="Or paste the Job Description text here…"
             className="rie-textarea"
             style={{ opacity: jdFile ? 0.5 : 1 }}
           />
@@ -118,13 +143,11 @@ const ReverseInterviewEngine = () => {
             disabled={isAnalyzing || (!jdText && !jdFile)}
             className="rie-analyze-btn"
             style={{
-              background: isAnalyzing ? 'var(--border-color)' : 'var(--accent-primary)',
-              color: isAnalyzing ? 'var(--text-secondary)' : '#000',
+              opacity: (isAnalyzing || (!jdText && !jdFile)) ? 0.6 : 1,
               cursor: isAnalyzing ? 'not-allowed' : 'pointer',
-              boxShadow: isAnalyzing ? 'none' : '0 4px 14px rgba(0, 255, 204, 0.4)',
             }}
           >
-            {isAnalyzing ? 'Analyzing via LangGraph...' : 'Generate Match & Strategy'}
+            {isAnalyzing ? '⏳ Analyzing via LangGraph…' : '⚡ Generate Match & Strategy'}
           </button>
 
           {error && <div style={{ color: 'red', fontSize: '14px' }}>{error}</div>}

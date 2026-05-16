@@ -2,127 +2,103 @@ import { useState, useEffect, useRef } from 'react';
 import './index.css';
 import './App.css';
 import ReverseInterviewEngine from './ReverseInterviewEngine';
-import ArchitectureDiagram from './ArchitectureDiagram';
-import DeployMe from './DeployMe';
-import ThoughtLeadership from './ThoughtLeadership';
-import LivePortfolio from './LivePortfolio';
-import kumarPhoto from './assets/kumar.jpg';
+import ArchitectureDiagram    from './ArchitectureDiagram';
+import DeployMe               from './DeployMe';
+import ThoughtLeadership      from './ThoughtLeadership';
+import LivePortfolio          from './LivePortfolio';
+import CareerArc              from './CareerArc';
+import SkillDNA               from './SkillDNA';
+import Endorsements           from './Endorsements';
+import AskAI                  from './AskAI';
+import kumarPhoto             from './assets/kumar.jpg';
 
-// ── Animated counter hook ──────────────────────────────────────────────────
+// ── Animated counter ───────────────────────────────────────
 const useCounter = (target: number, duration = 1800) => {
-  const [count, setCount] = useState(0);
-  const started = useRef(false);
+  const [count, setCount]   = useState(0);
+  const started             = useRef(false);
   useEffect(() => {
     if (started.current) return;
     started.current = true;
-    const steps = 60;
-    const increment = target / steps;
-    let current = 0;
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) { setCount(target); clearInterval(timer); }
-      else setCount(Math.floor(current));
+    const steps = 60, inc = target / steps;
+    let cur = 0;
+    const t = setInterval(() => {
+      cur += inc;
+      if (cur >= target) { setCount(target); clearInterval(t); }
+      else setCount(Math.floor(cur));
     }, duration / steps);
-    return () => clearInterval(timer);
+    return () => clearInterval(t);
   }, [target, duration]);
   return count;
 };
 
-// ── Stats data ─────────────────────────────────────────────────────────────
 const STATS = [
-  { value: 22,  suffix: 'M+', label: 'Users Served' },
-  { value: 75,  suffix: '+',  label: 'FTE Saved' },
-  { value: 400, suffix: '%',  label: 'Bill Pay Growth' },
-  { value: 30,  suffix: '+',  label: 'Prod AI Systems' },
+  { value: 22,  suffix: 'M+', label: 'Users Served'    },
+  { value: 75,  suffix: '+',  label: 'FTE Saved'        },
+  { value: 400, suffix: '%',  label: 'Bill Pay Growth'  },
+  { value: 30,  suffix: '+',  label: 'Prod AI Systems'  },
 ];
 
-const StatItem = ({ value, suffix, label }: { value: number; suffix: string; label: string }) => {
+const StatCell = ({ value, suffix, label }: { value: number; suffix: string; label: string }) => {
   const count = useCounter(value);
   return (
-    <div style={{ textAlign: 'center', flex: 1 }}>
-      <div style={{ fontSize: '16px', fontWeight: 800, color: 'var(--accent-primary)', lineHeight: 1 }}>
-        {count}{suffix}
-      </div>
-      <div style={{ fontSize: '9px', color: 'var(--text-secondary)', marginTop: '3px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-        {label}
-      </div>
+    <div className="stat-cell">
+      <div className="stat-val">{count}<span className="stat-suf">{suffix}</span></div>
+      <div className="stat-lbl">{label}</div>
     </div>
   );
 };
 
-// ── Ambient background canvas ──────────────────────────────────────────────
+// ── Ambient canvas (Forest Canopy palette) ─────────────────
 const AmbientBackground = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
+  const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-    window.addEventListener('resize', resize);
-
+    const cv = ref.current; if (!cv) return;
+    const ctx = cv.getContext('2d'); if (!ctx) return;
+    const resize = () => { cv.width = innerWidth; cv.height = innerHeight; };
+    resize(); addEventListener('resize', resize);
     const orbs = [
-      { x: 0.15, y: 0.1,  r: 320, color: 'rgba(0,255,204,0.045)', dx: 0.00012,  dy: 0.00008 },
-      { x: 0.85, y: 0.2,  r: 280, color: 'rgba(0,136,255,0.04)',   dx: -0.0001,  dy: 0.00012 },
-      { x: 0.5,  y: 0.85, r: 350, color: 'rgba(167,139,250,0.03)', dx: 0.00008,  dy: -0.0001 },
+      { x: .14, y: .10, r: 420, c: 'rgba(45,74,43,0.32)',   dx:  .00008, dy:  .00006 },
+      { x: .82, y: .22, r: 340, c: 'rgba(74,103,65,0.18)',   dx: -.00007, dy:  .00009 },
+      { x: .50, y: .88, r: 460, c: 'rgba(45,74,43,0.22)',    dx:  .00005, dy: -.00007 },
+      { x: .88, y: .70, r: 280, c: 'rgba(125,132,113,0.13)', dx: -.00009, dy: -.00005 },
+      { x: .28, y: .50, r: 260, c: 'rgba(200,168,75,0.06)',  dx:  .00010, dy:  .00007 },
     ];
-
     let frame: number;
     const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      orbs.forEach(orb => {
-        orb.x += orb.dx;
-        orb.y += orb.dy;
-        if (orb.x < 0 || orb.x > 1) orb.dx *= -1;
-        if (orb.y < 0 || orb.y > 1) orb.dy *= -1;
-        const grd = ctx.createRadialGradient(
-          orb.x * canvas.width, orb.y * canvas.height, 0,
-          orb.x * canvas.width, orb.y * canvas.height, orb.r
-        );
-        grd.addColorStop(0, orb.color);
-        grd.addColorStop(1, 'transparent');
-        ctx.fillStyle = grd;
-        ctx.beginPath();
-        ctx.arc(orb.x * canvas.width, orb.y * canvas.height, orb.r, 0, Math.PI * 2);
-        ctx.fill();
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      orbs.forEach(o => {
+        o.x += o.dx; o.y += o.dy;
+        if (o.x < -.1 || o.x > 1.1) o.dx *= -1;
+        if (o.y < -.1 || o.y > 1.1) o.dy *= -1;
+        const g = ctx.createRadialGradient(o.x * cv.width, o.y * cv.height, 0, o.x * cv.width, o.y * cv.height, o.r);
+        g.addColorStop(0, o.c); g.addColorStop(1, 'transparent');
+        ctx.fillStyle = g; ctx.beginPath();
+        ctx.arc(o.x * cv.width, o.y * cv.height, o.r, 0, Math.PI * 2); ctx.fill();
       });
       frame = requestAnimationFrame(draw);
     };
     draw();
-
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('resize', resize);
-    };
+    return () => { cancelAnimationFrame(frame); removeEventListener('resize', resize); };
   }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }}
-    />
-  );
+  return <canvas ref={ref} style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }} />;
 };
 
-// ── Nav items config ───────────────────────────────────────────────────────
+// ── Nav config ─────────────────────────────────────────────
 const NAV_ITEMS = [
-  { color: '#00ffcc', label: 'Digital Twin',       tab: 'twin',             external: 'https://resume-rewrite-production.up.railway.app/' },
-  { color: '#0088ff', label: 'Match Engine',       tab: 'reverse_interview' },
-  { color: '#a78bfa', label: 'Architecture',       tab: 'architecture' },
-  { color: '#fb923c', label: 'Thought Leadership', tab: 'thought' },
-  { color: '#34d399', label: 'Live Portfolio',     tab: 'portfolio' },
-  { color: '#f472b6', label: 'Deploy Me',          tab: 'deploy' },
+  { color: '#a4ac86', label: 'Architecture',       tab: 'architecture'      },
+  { color: '#8bb8d0', label: 'Match Engine',        tab: 'reverse_interview' },
+  { color: '#c8a84b', label: 'Career Arc',          tab: 'career',  badge: 'NEW' },
+  { color: '#a4ac86', label: 'Skill DNA',           tab: 'skills',  badge: 'NEW' },
+  { color: '#c4a47e', label: 'Endorsements',        tab: 'endorse', badge: 'NEW' },
+  { color: '#c8a84b', label: 'Thought Leadership',  tab: 'thought'           },
+  { color: '#9da390', label: 'Live Portfolio',      tab: 'portfolio'         },
+  { color: '#c4a47e', label: 'Deploy Me',           tab: 'deploy'            },
+  { color: '#a4ac86', label: 'Digital Twin',        tab: 'twin', external: 'https://resume-rewrite-production.up.railway.app/' },
 ];
 
-// ── Main App ───────────────────────────────────────────────────────────────
+// ── Main App ───────────────────────────────────────────────
 const App = () => {
-  const [activeTab, setActiveTab] = useState('architecture');
+  const [activeTab, setActiveTab]   = useState('architecture');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleNav = (tab: string, external?: string) => {
@@ -137,22 +113,21 @@ const App = () => {
 
       {/* ── Mobile Header ── */}
       <header className="mobile-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <img src={kumarPhoto} alt="Kumar Gyanam" className="mobile-avatar" />
           <div>
-            <h1 className="text-gradient" style={{ fontSize: '15px', margin: 0 }}>KUMAR GYANAM</h1>
-            <div style={{ fontSize: '10px', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'var(--accent-primary)', flexShrink: 0 }} className="animate-pulse" />
+            <h1 className="text-gradient heading-serif" style={{ fontSize: 15, margin: 0 }}>KUMAR GYANAM</h1>
+            <div style={{ fontSize: 9.5, color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', gap: 4, fontFamily: 'DM Mono, monospace', letterSpacing: '.5px' }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--accent-primary)', flexShrink: 0 }} className="animate-pulse" />
               SYSTEM ONLINE V2.5
             </div>
           </div>
         </div>
-        <button className="hamburger" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Toggle menu">
+        <button className="hamburger" onClick={() => setSidebarOpen(s => !s)}>
           {sidebarOpen ? '✕' : '☰'}
         </button>
       </header>
 
-      {/* ── Drawer overlay ── */}
       {sidebarOpen && <div className="drawer-overlay" onClick={() => setSidebarOpen(false)} />}
 
       {/* ── Sidebar ── */}
@@ -160,160 +135,148 @@ const App = () => {
 
         {/* Brand */}
         <div className="brand">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <img
-              src={kumarPhoto}
-              alt="Kumar Gyanam"
-              style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-primary)', boxShadow: '0 0 12px rgba(0, 255, 204, 0.35)', flexShrink: 0 }}
-            />
+          <div className="brand-profile">
+            <div className="brand-av-ring">
+              <img src={kumarPhoto} alt="Kumar Gyanam" className="brand-av" />
+              <div className="brand-online-dot" />
+            </div>
             <div>
-              <h1 className="text-gradient" style={{ fontSize: '20px', margin: 0, letterSpacing: '-0.5px' }}>KUMAR GYANAM</h1>
-              <div style={{ fontSize: '11px', color: 'var(--accent-primary)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'var(--accent-primary)', flexShrink: 0 }} className="animate-pulse" />
+              <div className="brand-name">KUMAR <em>GYANAM</em></div>
+              <div className="brand-sys">
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent-primary)', flexShrink: 0 }} className="animate-pulse" />
                 SYSTEM ONLINE V2.5
               </div>
             </div>
           </div>
-
-          {/* Animated Stats Bar */}
-          <div style={{ display: 'flex', gap: '4px', padding: '10px 8px', background: 'rgba(0,255,204,0.04)', border: '1px solid rgba(0,255,204,0.12)', borderRadius: '10px' }}>
-            {STATS.map((s, i) => <StatItem key={i} value={s.value} suffix={s.suffix} label={s.label} />)}
+          <div className="brand-avail">
+            <div className="brand-avail-dot" />
+            Open to CAIO · Chief AI Architect
           </div>
         </div>
 
+        {/* Stats */}
+        <div className="stats-grid">
+          {STATS.map((s, i) => <StatCell key={i} value={s.value} suffix={s.suffix} label={s.label} />)}
+        </div>
+
         {/* Nav */}
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div className="nav-section">
+          <div className="nav-label">Navigate</div>
           {NAV_ITEMS.map(item => (
             <NavItem
               key={item.tab}
               color={item.color}
               label={item.label}
+              badge={item.badge}
               isActive={activeTab === item.tab}
               onClick={() => handleNav(item.tab, item.external)}
             />
           ))}
-        </nav>
+        </div>
+
+        {/* Quick CTAs */}
+        <div className="quick-ctas">
+          <button className="btn-primary-sidebar">📄 Download Resume</button>
+          <button className="btn-sec-sidebar">🗓 Book 15-min Call</button>
+        </div>
 
         {/* Footer */}
-        <div style={{ marginTop: 'auto', borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-            CHIEF AI ARCHITECT<br />
-            SBI CARD | GURGAON<br />
-            <span style={{ color: 'var(--accent-primary)', fontSize: '11px' }}>Faculty: IIM Indore · ISB</span>
-          </div>
-          <a
-            href="https://chromewebstore.google.com/detail/ai-job-assistant/jfjimn keogmhmgcigcecemijmhjgoppb"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px', padding: '7px 10px', borderRadius: '8px', textDecoration: 'none', background: 'rgba(0,136,255,0.08)', border: '1px solid rgba(0,136,255,0.2)', color: '#0088ff', fontSize: '11px', fontWeight: 600, transition: 'background 0.2s ease' }}
-            onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,136,255,0.15)'}
-            onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,136,255,0.08)'}
-          >
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#0088ff', boxShadow: '0 0 6px #0088ff', flexShrink: 0, display: 'inline-block' }} />
-            AI Job Assistant — Chrome
-          </a>
-          <div style={{ marginTop: '12px' }}>
-            <input
-              type="file" id="masterCvInput" accept="application/pdf"
-              style={{ display: 'none' }}
-              onChange={async (e) => {
-                if (e.target.files && e.target.files[0]) {
-                  const formData = new FormData();
-                  formData.append('file', e.target.files[0]);
-                  try {
-                    const res = await fetch('/api/upload_cv', { method: 'POST', body: formData });
-                    if (res.ok) alert('Master CV Updated Successfully!');
-                    else alert('Failed to update CV');
-                  } catch { alert('Error uploading CV'); }
-                }
-              }}
-            />
-            <button
-              onClick={() => document.getElementById('masterCvInput')?.click()}
-              style={{ background: 'transparent', border: '1px dashed var(--border-color)', color: 'var(--text-secondary)', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', width: '100%' }}>
-              ⚙️ Update Master CV
-            </button>
-          </div>
+        <div className="sidebar-footer">
+          <strong>Chief AI Architect</strong><br />
+          SBI Card · Gurgaon, India<br />
+          <span className="sidebar-footer-badge">★ Faculty: IIM Indore · ISB</span>
+        </div>
+
+        {/* Master CV upload */}
+        <div>
+          <input type="file" id="masterCvInput" accept="application/pdf" style={{ display: 'none' }}
+            onChange={async e => {
+              if (e.target.files?.[0]) {
+                const fd = new FormData(); fd.append('file', e.target.files[0]);
+                try {
+                  const res = await fetch('/api/upload_cv', { method: 'POST', body: fd });
+                  alert(res.ok ? 'Master CV Updated!' : 'Failed to update CV');
+                } catch { alert('Error uploading CV'); }
+              }
+            }}
+          />
+          <button onClick={() => document.getElementById('masterCvInput')?.click()}
+            style={{ background: 'transparent', border: '1px dashed var(--border-color)', color: 'var(--text-secondary)', padding: '6px 12px', borderRadius: 4, cursor: 'pointer', fontSize: 11, width: '100%', fontFamily: 'DM Sans, sans-serif' }}>
+            ⚙️ Update Master CV
+          </button>
         </div>
       </aside>
 
       {/* ── Main Content ── */}
-      <main className="main-content">
-        {activeTab === 'reverse_interview' && <ReverseInterviewEngine />}
+      <main className="main-content" style={{ position: 'relative', zIndex: 1 }}>
         {activeTab === 'architecture'      && <ArchitectureDiagram />}
+        {activeTab === 'reverse_interview' && <ReverseInterviewEngine />}
+        {activeTab === 'career'            && <CareerArc />}
+        {activeTab === 'skills'            && <SkillDNA />}
+        {activeTab === 'endorse'           && <Endorsements />}
         {activeTab === 'thought'           && <ThoughtLeadership />}
         {activeTab === 'portfolio'         && <LivePortfolio />}
         {activeTab === 'deploy'            && <DeployMe />}
-        {!['reverse_interview', 'architecture', 'thought', 'portfolio', 'deploy'].includes(activeTab) && (
-          <div className="glass-panel" style={{ height: '100%', minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <h2 style={{ color: 'var(--text-secondary)' }}>Module "{activeTab}" coming soon.</h2>
-          </div>
-        )}
       </main>
 
       {/* ── Mobile Bottom Nav ── */}
       <nav className="mobile-bottom-nav">
-        {NAV_ITEMS.map(item => (
+        {NAV_ITEMS.filter(n => !n.external).slice(0, 6).map(item => (
           <MobileNavItem
             key={item.tab}
             color={item.color}
             label={item.label.split(' ')[0]}
             isActive={activeTab === item.tab}
-            onClick={() => handleNav(item.tab, item.external)}
+            onClick={() => handleNav(item.tab)}
           />
         ))}
       </nav>
+
+      {/* ── Floating AI Chat ── */}
+      <AskAI />
     </div>
   );
 };
 
-// ── NavItem ────────────────────────────────────────────────────────────────
-const NavItem = ({ color, label, isActive, onClick }: { color: string; label: string; isActive: boolean; onClick: () => void }) => (
-  <div
+// ── NavItem ────────────────────────────────────────────────
+const NavItem = ({ color, label, badge, isActive, onClick }: { color: string; label: string; badge?: string; isActive: boolean; onClick: () => void }) => (
+  <div className="nav-item"
     onClick={onClick}
     style={{
-      display: 'flex', alignItems: 'center', gap: '12px',
-      padding: '11px 16px', borderRadius: '8px', cursor: 'pointer',
-      background: isActive ? `${color}18` : 'transparent',
-      border: isActive ? `1px solid ${color}40` : '1px solid transparent',
-      color: isActive ? color : 'var(--text-secondary)',
-      transition: 'all 0.2s ease',
+      background:   isActive ? `${color}14` : 'transparent',
+      border:       isActive ? `1px solid ${color}38` : '1px solid transparent',
+      color:        isActive ? color : 'var(--text-secondary)',
     }}
-    onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
-    onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+    onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'rgba(164,172,134,0.05)'; }}
+    onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
   >
     <div style={{
-      width: '28px', height: '28px', borderRadius: '7px', flexShrink: 0,
-      background: isActive ? `${color}25` : 'rgba(255,255,255,0.04)',
-      border: `1px solid ${isActive ? color + '50' : 'rgba(255,255,255,0.08)'}`,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      transition: 'all 0.2s ease',
-    }}>
-      <div style={{
-        width: '8px', height: '8px', borderRadius: '50%',
-        background: isActive ? color : 'rgba(255,255,255,0.25)',
-        boxShadow: isActive ? `0 0 6px ${color}` : 'none',
-        transition: 'all 0.2s ease',
-      }} />
-    </div>
-    <span style={{ fontWeight: 500, fontSize: '14px' }}>{label}</span>
+      width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
+      background: isActive ? color : 'rgba(255,255,255,0.2)',
+      boxShadow:  isActive ? `0 0 8px ${color}` : 'none',
+      transition: 'all 0.2s',
+    }} />
+    <span style={{ fontWeight: 500, fontSize: 13, flex: 1 }}>{label}</span>
+    {badge && (
+      <span style={{
+        fontSize: 7.5, fontFamily: 'DM Mono, monospace', padding: '2px 6px',
+        borderRadius: 3, background: 'rgba(164,172,134,0.12)',
+        border: '1px solid rgba(164,172,134,0.25)', color: 'var(--olive)', letterSpacing: '.3px',
+      }}>{badge}</span>
+    )}
   </div>
 );
 
-// ── MobileNavItem ──────────────────────────────────────────────────────────
+// ── MobileNavItem ──────────────────────────────────────────
 const MobileNavItem = ({ color, label, isActive, onClick }: { color: string; label: string; isActive: boolean; onClick: () => void }) => (
-  <button
-    onClick={onClick}
-    style={{
-      flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
-      justifyContent: 'center', gap: '3px', padding: '8px 2px',
-      background: 'transparent', border: 'none', cursor: 'pointer',
-      color: isActive ? color : 'var(--text-secondary)',
-      fontSize: '9px', fontWeight: isActive ? 700 : 400,
-      transition: 'color 0.2s ease',
-    }}
-  >
-    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: isActive ? color : 'transparent', boxShadow: isActive ? `0 0 6px ${color}` : 'none', marginBottom: '2px', transition: 'all 0.2s' }} />
+  <button onClick={onClick} style={{
+    flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
+    justifyContent: 'center', gap: 3, padding: '8px 2px',
+    background: 'transparent', border: 'none', cursor: 'pointer',
+    color: isActive ? color : 'var(--text-secondary)',
+    fontSize: 9, fontWeight: isActive ? 700 : 400, transition: 'color 0.2s',
+  }}>
+    <div style={{ width: 6, height: 6, borderRadius: '50%', background: isActive ? color : 'transparent', boxShadow: isActive ? `0 0 6px ${color}` : 'none', marginBottom: 2, transition: 'all 0.2s' }} />
     {label}
   </button>
 );
