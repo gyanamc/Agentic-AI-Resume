@@ -202,7 +202,6 @@ const App = () => {
               key={item.tab}
               color={item.color}
               label={item.label}
-              badge={item.badge}
               isActive={activeTab === item.tab}
               onClick={() => handleNav(item.tab)}
             />
