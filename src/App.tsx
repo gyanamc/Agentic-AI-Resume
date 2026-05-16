@@ -93,10 +93,43 @@ const NAV_ITEMS = [
   { color: '#c8a84b', label: 'Thought Leadership',  tab: 'thought'           },
   { color: '#9da390', label: 'Live Portfolio',      tab: 'portfolio'         },
   { color: '#c4a47e', label: 'Deploy Me',           tab: 'deploy'            },
-  { color: '#a4ac86', label: 'Digital Twin',        tab: 'twin', external: 'https://resume-rewrite-production.up.railway.app/' },
 ];
 
-// ── Main App ───────────────────────────────────────────────
+// ── Digital Twin Hero Card ─────────────────────────────────
+const DigitalTwinHero = () => (
+  <a
+    href="https://resume-rewrite-production.up.railway.app/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="dt-hero"
+  >
+    {/* Animated background shimmer */}
+    <div className="dt-hero-shimmer" />
+
+    {/* Top row: label + LIVE badge */}
+    <div className="dt-hero-top">
+      <span className="dt-hero-eyebrow">✦ FEATURED</span>
+      <span className="dt-hero-live">
+        <span className="dt-hero-live-dot" />
+        LIVE
+      </span>
+    </div>
+
+    {/* Title */}
+    <div className="dt-hero-title">Digital Twin</div>
+    <div className="dt-hero-sub">
+      Talk to my AI. Ask anything about my career, skills, or fit for your role.
+    </div>
+
+    {/* CTA */}
+    <div className="dt-hero-cta">
+      Launch Experience
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7 17L17 7M17 7H7M17 7v10" />
+      </svg>
+    </div>
+  </a>
+);
 const App = () => {
   const [activeTab, setActiveTab]   = useState('architecture');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -158,6 +191,9 @@ const App = () => {
         <div className="stats-grid">
           {STATS.map((s, i) => <StatCell key={i} value={s.value} suffix={s.suffix} label={s.label} />)}
         </div>
+
+        {/* Digital Twin Hero */}
+        <DigitalTwinHero />
 
         {/* Nav */}
         <div className="nav-section">
@@ -221,7 +257,7 @@ const App = () => {
 
       {/* ── Mobile Bottom Nav ── */}
       <nav className="mobile-bottom-nav">
-        {NAV_ITEMS.filter(n => !n.external).slice(0, 6).map(item => (
+        {NAV_ITEMS.slice(0, 5).map(item => (
           <MobileNavItem
             key={item.tab}
             color={item.color}
@@ -230,6 +266,15 @@ const App = () => {
             onClick={() => handleNav(item.tab)}
           />
         ))}
+        <a
+          href="https://resume-rewrite-production.up.railway.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mobile-dt-btn"
+        >
+          <span className="mobile-dt-dot" />
+          Twin
+        </a>
       </nav>
 
       {/* ── Floating AI Chat ── */}
