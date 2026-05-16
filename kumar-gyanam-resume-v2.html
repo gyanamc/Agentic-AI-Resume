@@ -572,6 +572,78 @@ html,body{background:var(--bg0);color:var(--ivory);font-family:var(--fb);height:
   .endr-grid{grid-template-columns:1fr}
   .topics-grid{grid-template-columns:1fr 1fr}
 }
+
+/* ══ DIGITAL TWIN HERO ══ */
+.dt-hero{
+  display:block;text-decoration:none;position:relative;overflow:hidden;
+  border-radius:var(--r14);
+  border:1.5px solid rgba(164,172,134,0.35);
+  background:linear-gradient(145deg,rgba(26,46,25,0.9),rgba(12,19,11,0.95));
+  padding:14px 14px 10px;
+  transition:all .25s ease;
+  animation:dtPulse 3s ease-in-out infinite;
+}
+.dt-hero:hover{
+  border-color:rgba(164,172,134,0.7);
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(45,74,43,0.5);
+  animation:none;
+}
+@keyframes dtPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(164,172,134,0),border-color:rgba(164,172,134,0.35)}
+  50%{box-shadow:0 0 16px 2px rgba(164,172,134,0.18);border-color:rgba(164,172,134,0.55)}
+}
+.dt-glow{
+  position:absolute;top:-30px;left:50%;transform:translateX(-50%);
+  width:160px;height:80px;
+  background:radial-gradient(ellipse,rgba(164,172,134,0.15),transparent 70%);
+  pointer-events:none;
+}
+.dt-inner{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dt-left{display:flex;align-items:center;gap:10px;flex:1}
+.dt-avatar{
+  position:relative;width:40px;height:40px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.dt-emoji{font-size:22px;position:relative;z-index:1}
+.dt-live-ring{
+  position:absolute;inset:-4px;border-radius:50%;
+  border:1.5px solid rgba(164,172,134,0.5);
+  animation:liveRing 2s ease-in-out infinite;
+}
+@keyframes liveRing{
+  0%,100%{transform:scale(1);opacity:.6}
+  50%{transform:scale(1.15);opacity:1}
+}
+.dt-text{}
+.dt-title{
+  font-family:var(--fh);font-size:13px;font-weight:800;
+  color:var(--olive);line-height:1.2;letter-spacing:-.1px;
+}
+.dt-sub{font-size:9.5px;color:var(--sage);font-family:var(--fm);margin-top:2px;letter-spacing:.3px}
+.dt-arrow{
+  font-size:16px;color:var(--olive);opacity:.7;
+  transition:transform .2s,opacity .2s;
+}
+.dt-hero:hover .dt-arrow{transform:translate(2px,-2px);opacity:1}
+/* live badge */
+.dt-live-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:8.5px;font-family:var(--fm);letter-spacing:.6px;text-transform:uppercase;
+  padding:2px 7px;border-radius:3px;
+  background:rgba(91,187,94,0.12);border:1px solid rgba(91,187,94,0.28);
+  color:#7dd47f;margin-bottom:8px;
+}
+.dt-live-dot{width:5px;height:5px;border-radius:50%;background:#7dd47f;animation:blink 1.4s infinite}
+/* teaser prompt */
+.dt-teaser{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 10px;border-radius:var(--r6);
+  background:rgba(164,172,134,0.06);border:1px solid rgba(164,172,134,0.12);
+  font-size:10.5px;color:var(--sage);font-family:var(--fm);
+}
+.dt-cursor{color:var(--olive);animation:blink .9s step-end infinite;font-size:12px}
+.dt-teaser-txt{color:var(--ivory-dim);font-style:italic}
 </style>
 </head>
 <body>
@@ -582,6 +654,30 @@ html,body{background:var(--bg0);color:var(--ivory);font-family:var(--fb);height:
 
 <!-- ═══════════ SIDEBAR ═══════════ -->
 <aside class="sb">
+
+
+<!-- ══ DIGITAL TWIN HERO — top of sidebar, first thing recruiters see ══ -->
+<a href="https://resume-rewrite-production.up.railway.app/" target="_blank" class="dt-hero" id="dtHero">
+  <div class="dt-glow"></div>
+  <div class="dt-live-badge"><div class="dt-live-dot"></div>LIVE · AI POWERED</div>
+  <div class="dt-inner">
+    <div class="dt-left">
+      <div class="dt-avatar">
+        <span class="dt-emoji">🤖</span>
+        <div class="dt-live-ring"></div>
+      </div>
+      <div class="dt-text">
+        <div class="dt-title">Chat with My Digital Twin</div>
+        <div class="dt-sub">Ask me anything — live AI, responds instantly</div>
+      </div>
+    </div>
+    <div class="dt-arrow">↗</div>
+  </div>
+  <div class="dt-teaser">
+    <span class="dt-cursor">▋</span>
+    <span class="dt-teaser-txt" id="dtTeaser">"Am I a fit for your CAIO role?"</span>
+  </div>
+</a>
 
   <div class="prof-card">
     <div class="pr">
@@ -599,24 +695,8 @@ html,body{background:var(--bg0);color:var(--ivory);font-family:var(--fb);height:
       Open to CAIO · Chief AI Architect
     </div>
 
-    <!-- Digital Twin — prominent CTA -->
-    <a href="https://resume-rewrite-production.up.railway.app/" target="_blank" style="
-      display:flex;align-items:center;gap:9px;margin-top:10px;
-      padding:10px 12px;border-radius:var(--r10);text-decoration:none;
-      background:linear-gradient(135deg,rgba(45,74,43,0.6),rgba(74,103,65,0.4));
-      border:1px solid rgba(164,172,134,0.35);
-      transition:all .2s;
-    " onmouseover="this.style.borderColor='rgba(164,172,134,0.6)'" onmouseout="this.style.borderColor='rgba(164,172,134,0.35)'">
-      <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--olive),var(--forest));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;box-shadow:0 0 10px rgba(164,172,134,0.3)">🤖</div>
-      <div>
-        <div style="font-family:var(--fh);font-size:12px;font-weight:700;color:var(--olive);line-height:1.2">Chat with My Digital Twin</div>
-        <div style="font-size:9.5px;color:var(--sage);font-family:var(--fm);margin-top:2px">AI · Live · Ask me anything</div>
-      </div>
-      <div style="margin-left:auto;font-size:11px;color:var(--sage)">↗</div>
-    </a>
-
     <!-- Social Links -->
-    <div style="display:flex;gap:7px;margin-top:8px">
+    <div style="display:flex;gap:7px;margin-top:10px">
       <a href="https://www.linkedin.com/in/kumar-gyanam/" target="_blank" style="
         flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
         padding:8px 10px;border-radius:var(--r6);text-decoration:none;
@@ -1211,6 +1291,28 @@ document.getElementById('chatSend').addEventListener('click',()=>{
   if(!v)return;inp.value='';askQ(v);
 });
 document.getElementById('chatInp').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('chatSend').click();});
+
+/* ─── DIGITAL TWIN TEASER ROTATOR ─── */
+(()=>{
+  const prompts=[
+    '"Am I a fit for your CAIO role?"',
+    '"What is Kumar\'s LangGraph experience?"',
+    '"Can he lead a 50-person AI team?"',
+    '"Has he deployed vLLM in production?"',
+    '"What\'s his biggest AI win at SBI Card?"',
+    '"How does he approach AI governance?"',
+    '"Is he open to relocating?"',
+    '"What makes Kumar different from other candidates?"',
+  ];
+  let idx=0;
+  const el=document.getElementById('dtTeaser');
+  if(!el)return;
+  el.style.transition='opacity .3s ease';
+  setInterval(()=>{
+    el.style.opacity='0';
+    setTimeout(()=>{idx=(idx+1)%prompts.length;el.textContent=prompts[idx];el.style.opacity='1';},320);
+  },3500);
+})();
 </script>
 </body>
 </html>
